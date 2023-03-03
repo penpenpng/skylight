@@ -1,11 +1,11 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 
 import PageIndex from "@/pages/PageIndex.vue";
 import PageLogin from "@/pages/PageLogin.vue";
 import { tryResumeSession } from "./lib/atp";
 
 export const router = createRouter({
-  history: createWebHistory("/skylight/dist/"),
+  history: createWebHashHistory("/skylight/dist/"),
   routes: [
     {
       name: "index",
