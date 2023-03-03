@@ -63,9 +63,8 @@ const getTextElements = (text: string, entities: Entity[]) => {
             post.record.text,
             post.record.entities || []
           )"
-          :key="idx"
         >
-          <span v-if="e.type === 'text'">{{ e.text }}</span>
+          <span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span>
           <a v-else :href="e.href" target="_blank">{{ e.text }}</a>
         </template>
       </div>

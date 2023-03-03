@@ -1,5 +1,4 @@
 import { AtpAgent, AtpSessionData } from "@atproto/api";
-
 const SES_LOCAL_STORAGE_KEY = "sess";
 
 const agent = new AtpAgent({
@@ -9,7 +8,7 @@ const agent = new AtpAgent({
   },
 });
 
-export let did: string | null = null;
+let did: string | null = null;
 
 export const tryResumeSession = async () => {
   const session = (() => {
@@ -37,6 +36,8 @@ export const tryResumeSession = async () => {
   return { success };
 };
 
+export const hasSession = () => !!did;
+
 export const createSession = async (params: {
   identifier: string;
   password: string;
@@ -56,6 +57,7 @@ export const createSession = async (params: {
 
 export const deleteSession = () => {
   localStorage.removeItem(SES_LOCAL_STORAGE_KEY);
+  did = null;
 };
 
 export type AtpResponse<T extends (...arg: any) => any> = Awaited<
@@ -80,6 +82,28 @@ export const postText = async (text: string) =>
     { did },
     { text, createdAt: new Date().toISOString() }
   );
+
+export const searchUsers = async (params: { term: string }) => {
+  const { success, data } = await agent.api.app.bsky.actor.search(params);
+
+  if (!success) {
+    throw new Error("searchUsers failed");
+  }
+
+  return data.users;
+};
+
+export const followUser = async (params: { did: string; cid: string }) =>
+  agent.api.app.bsky.graph.follow.create(
+    { did },
+    {
+      subject: { did: params.did, declarationCid: params.cid },
+      createdAt: new Date().toISOString(),
+    }
+  );
+
+export const unfollowUser = async (params: { did: string; rkey: string }) =>
+  agent.api.app.bsky.graph.follow.delete(params);
 
 export type Feed = AtpResponse<typeof getTimeline>["feed"][number] & {
   post: { record: Record };
@@ -108,3 +132,5 @@ export type Entity = {
   index: { start: number; end: number };
   value: string;
 };
+
+export type User = AtpResponse<typeof searchUsers>[number];

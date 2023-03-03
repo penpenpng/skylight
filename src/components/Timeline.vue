@@ -1,14 +1,16 @@
 <script setup lang="ts">
-import Post from "@/components/Post.vue";
+import TilePost from "@/components/TilePost.vue";
 import { useState, refreshTimeline } from "@/store";
 
 const state = useState();
 
-await refreshTimeline();
+if (state.timeline.length <= 0) {
+  await refreshTimeline();
+}
 </script>
 
 <template>
-  <Post
+  <TilePost
     v-for="{ post } in state.timeline"
     :post="post"
     :key="post.cid"

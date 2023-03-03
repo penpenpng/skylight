@@ -1,29 +1,38 @@
-import { createRouter, createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
-import PageIndex from "@/pages/PageIndex.vue";
 import PageLogin from "@/pages/PageLogin.vue";
+import PageIndex from "@/pages/PageIndex.vue";
+import PageSearchUser from "@/pages/PageSearchUser.vue";
 import { tryResumeSession } from "./lib/atp";
+
+const assumeLogin: RouteRecordRaw["beforeEnter"] = async (to, from, next) => {
+  const { success } = await tryResumeSession();
+  if (success) {
+    next();
+  } else {
+    next({ name: "login" });
+  }
+};
 
 export const router = createRouter({
   history: createWebHashHistory(),
   routes: [
     {
-      name: "index",
-      path: "/",
-      component: PageIndex,
-      beforeEnter: async (to, from, next) => {
-        const { success } = await tryResumeSession();
-        if (success) {
-          next();
-        } else {
-          next({ name: "login" });
-        }
-      },
-    },
-    {
       name: "login",
       path: "/login",
       component: PageLogin,
+    },
+    {
+      name: "index",
+      path: "/",
+      component: PageIndex,
+      beforeEnter: assumeLogin,
+    },
+    {
+      name: "search",
+      path: "/search",
+      component: PageSearchUser,
+      beforeEnter: assumeLogin,
     },
   ],
 });

@@ -22,7 +22,6 @@ const login = async () => {
 </script>
 
 <template>
-  <h1 style="font-family: 'Segoe UI Mono'">Skylight</h1>
   <p>Minimal Bluesky Client for bsky.social</p>
 
   <form @submit.prevent="login" :class="{ 'has-error': state.hasError }">
