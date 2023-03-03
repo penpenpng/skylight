@@ -37,7 +37,7 @@ export const tryResumeSession = async () => {
   return { success };
 };
 
-export const login = async (params: {
+export const createSession = async (params: {
   identifier: string;
   password: string;
 }) => {
@@ -52,6 +52,10 @@ export const login = async (params: {
   } catch {
     return { success: false };
   }
+};
+
+export const deleteSession = () => {
+  localStorage.removeItem(SES_LOCAL_STORAGE_KEY);
 };
 
 export type AtpResponse<T extends (...arg: any) => any> = Awaited<
