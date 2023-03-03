@@ -86,3 +86,9 @@ const repostedBy = computed(() => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.tile-subtitle a {
+  overflow-wrap: anywhere;
+}
+</style>
