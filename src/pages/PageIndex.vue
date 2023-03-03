@@ -33,10 +33,7 @@ const submit = async () => {
   </div>
 
   <div class="columns col-oneline p-2">
-    <button
-      class="btn btn-secondary col-2 col-ml-auto"
-      @click="refreshTimeline"
-    >
+    <button class="btn btn-secondary col-ml-auto" @click="refreshTimeline">
       Refresh
     </button>
   </div>
