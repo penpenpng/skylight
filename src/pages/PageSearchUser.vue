@@ -30,7 +30,7 @@ const submit = async () => {
       class="btn btn-primary input-group-btn"
       @click="submit"
     >
-      Submit
+      Search
     </button>
   </form>
 
