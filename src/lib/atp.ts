@@ -1,4 +1,4 @@
-import AtpAgent, { AtpSessionData } from "@atproto/api";
+import { AtpAgent, AtpSessionData } from "@atproto/api";
 
 const SES_LOCAL_STORAGE_KEY = "sess";
 
