@@ -5,7 +5,7 @@ import PageLogin from "@/pages/PageLogin.vue";
 import { tryResumeSession } from "./lib/atp";
 
 export const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/skylight/dist/"),
   routes: [
     {
       name: "index",
