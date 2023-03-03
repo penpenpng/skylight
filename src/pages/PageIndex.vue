@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Post from "@/components/Post.vue";
+import Loadable from "@/components/Loadable.vue";
+import Timeline from "@/components/Timeline.vue";
 import { postText } from "@/lib/atp";
-import { useState, refreshTimeline } from "@/store";
+import { refreshTimeline } from "@/store";
 
-const state = useState();
 const text = ref("");
-
-await refreshTimeline();
 
 const submit = async () => {
   const v = text.value;
@@ -22,12 +20,6 @@ const submit = async () => {
 </script>
 
 <template>
-  <div class="columns col-oneline p-2">
-    <h1 class="col-10" style="font-family: 'Segoe UI Mono'">Skylight</h1>
-    <button class="btn btn-secondary col-2" @click="refreshTimeline">
-      Refresh
-    </button>
-  </div>
   <div class="input-group my-2">
     <input
       v-model="text"
@@ -40,10 +32,16 @@ const submit = async () => {
     </button>
   </div>
 
-  <Post
-    v-for="{ post } in state.timeline"
-    :post="post"
-    :key="post.cid"
-    class="tile py-2 my-2"
-  />
+  <div class="columns col-oneline p-2">
+    <button
+      class="btn btn-secondary col-2 col-ml-auto"
+      @click="refreshTimeline"
+    >
+      Refresh
+    </button>
+  </div>
+
+  <Loadable>
+    <Timeline />
+  </Loadable>
 </template>

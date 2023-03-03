@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { login } from "@/lib/atp";
+import { createSession } from "@/lib/atp";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
@@ -10,8 +10,8 @@ const state = reactive({
   hasError: false,
 });
 
-const tryLogin = async () => {
-  const { success } = await login(state);
+const login = async () => {
+  const { success } = await createSession(state);
 
   state.hasError = !success;
 
@@ -22,10 +22,9 @@ const tryLogin = async () => {
 </script>
 
 <template>
-  <h1 style="font-family: 'Segoe UI Mono'">Skylight</h1>
   <p>Minimal Bluesky Client for bsky.social</p>
 
-  <form @submit.prevent="tryLogin" :class="{ 'has-error': state.hasError }">
+  <form @submit.prevent="login" :class="{ 'has-error': state.hasError }">
     <div class="form-group">
       <label class="form-label" for="identifier">Identifier (Email)</label>
       <input
