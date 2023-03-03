@@ -6,7 +6,6 @@ const agent = new AtpAgent({
   service: "https://bsky.social",
   persistSession: (evt, sess) => {
     localStorage.setItem(SES_LOCAL_STORAGE_KEY, JSON.stringify(sess));
-    console.log({ evt, sess });
   },
 });
 
