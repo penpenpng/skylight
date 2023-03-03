@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import Post from "@/components/Post.vue";
+import Loadable from "@/components/Loadable.vue";
+import Timeline from "@/components/Timeline.vue";
 import { postText } from "@/lib/atp";
-import { useState, refreshTimeline } from "@/store";
+import { refreshTimeline } from "@/store";
 
-const state = useState();
 const text = ref("");
-
-await refreshTimeline();
 
 const submit = async () => {
   const v = text.value;
@@ -40,10 +38,7 @@ const submit = async () => {
     </button>
   </div>
 
-  <Post
-    v-for="{ post } in state.timeline"
-    :post="post"
-    :key="post.cid"
-    class="tile py-2 my-2"
-  />
+  <Loadable>
+    <Timeline />
+  </Loadable>
 </template>

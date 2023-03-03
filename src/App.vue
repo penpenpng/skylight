@@ -2,8 +2,6 @@
 
 <template>
   <main class="m-2 p-2">
-    <Suspense>
-      <router-view />
-    </Suspense>
+    <RouterView />
   </main>
 </template>
