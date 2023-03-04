@@ -8,7 +8,7 @@ const agent = new AtpAgent({
   },
 });
 
-let did: string | null = null;
+let self: { did: string; handle: string } | null = null;
 
 export const tryResumeSession = async () => {
   const session = (() => {
@@ -30,13 +30,11 @@ export const tryResumeSession = async () => {
   const { success, data } = await agent.resumeSession(session);
 
   if (success) {
-    did = data.did;
+    self = data;
   }
 
   return { success };
 };
-
-export const hasSession = () => !!did;
 
 export const createSession = async (params: {
   identifier: string;
@@ -46,7 +44,7 @@ export const createSession = async (params: {
     const { success, data } = await agent.login(params);
 
     if (success) {
-      did = data.did;
+      self = data;
     }
 
     return { success };
@@ -57,7 +55,7 @@ export const createSession = async (params: {
 
 export const deleteSession = () => {
   localStorage.removeItem(SES_LOCAL_STORAGE_KEY);
-  did = null;
+  self = null;
 };
 
 export type AtpResponse<T extends (...arg: any) => any> = Awaited<
@@ -79,7 +77,7 @@ export const getTimeline = async (params: {
 
 export const postText = async (text: string) =>
   agent.api.app.bsky.feed.post.create(
-    { did },
+    { did: self?.did },
     { text, createdAt: new Date().toISOString() }
   );
 
@@ -95,7 +93,7 @@ export const searchUsers = async (params: { term: string }) => {
 
 export const followUser = async (params: { did: string; cid: string }) =>
   agent.api.app.bsky.graph.follow.create(
-    { did },
+    { did: self?.did },
     {
       subject: { did: params.did, declarationCid: params.cid },
       createdAt: new Date().toISOString(),
@@ -104,6 +102,78 @@ export const followUser = async (params: { did: string; cid: string }) =>
 
 export const unfollowUser = async (params: { did: string; rkey: string }) =>
   agent.api.app.bsky.graph.follow.delete(params);
+
+export const getMyProfile = async () => {
+  const handle = self?.handle;
+
+  if (!handle) {
+    throw new Error("No session");
+  }
+
+  const { success, data } = await agent.api.app.bsky.actor.getProfile({
+    actor: handle,
+  });
+
+  if (!success) {
+    throw new Error("getMyProfile failed");
+  }
+
+  return data;
+};
+
+export const getMyFollows = async () => {
+  const handle = self?.handle;
+
+  if (!handle) {
+    throw new Error("No session");
+  }
+
+  const { success, data } = await agent.api.app.bsky.graph.getFollows({
+    user: handle,
+  });
+
+  if (!success) {
+    throw new Error("getMyFollows failed");
+  }
+
+  return data;
+};
+
+export const getMyFollowers = async () => {
+  const handle = self?.handle;
+
+  if (!handle) {
+    throw new Error("No session");
+  }
+
+  const { success, data } = await agent.api.app.bsky.graph.getFollowers({
+    user: handle,
+  });
+
+  if (!success) {
+    throw new Error("getMyFollowers failed");
+  }
+
+  return data;
+};
+
+export const getMyFeed = async () => {
+  const handle = self?.handle;
+
+  if (!handle) {
+    throw new Error("No session");
+  }
+
+  const { success, data } = await agent.api.app.bsky.feed.getAuthorFeed({
+    author: handle,
+  });
+
+  if (!success) {
+    throw new Error("getMyFollowers failed");
+  }
+
+  return data;
+};
 
 export type Feed = AtpResponse<typeof getTimeline>["feed"][number] & {
   post: { record: Record };

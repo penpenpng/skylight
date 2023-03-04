@@ -8,6 +8,25 @@ const logout = () => {
   deleteSession();
   location.reload();
 };
+
+const tabs = [
+  {
+    routeName: "index",
+    label: "Home",
+  },
+  {
+    routeName: "search",
+    label: "Search",
+  },
+  {
+    routeName: "profile",
+    label: "Profile",
+  },
+  {
+    routeName: "settings",
+    label: "Settings",
+  },
+];
 </script>
 
 <template>
@@ -23,11 +42,13 @@ const logout = () => {
   </div>
 
   <ul v-if="route.name !== 'login'" class="tab">
-    <li class="tab-item" :class="{ active: route.name === 'index' }">
-      <RouterLink :to="{ name: 'index' }">Home</RouterLink>
-    </li>
-    <li class="tab-item" :class="{ active: route.name === 'search' }">
-      <RouterLink :to="{ name: 'search' }">Search</RouterLink>
+    <li
+      v-for="({ routeName, label }, idx) in tabs"
+      :key="idx"
+      class="tab-item"
+      :class="{ active: route.name === routeName }"
+    >
+      <RouterLink :to="{ name: routeName }">{{ label }}</RouterLink>
     </li>
   </ul>
 </template>

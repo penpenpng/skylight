@@ -1,10 +1,13 @@
 <script setup lang="ts">
 import TheHeader from "@/components/TheHeader.vue";
+import Loadable from "./components/Loadable.vue";
 </script>
 
 <template>
   <main class="m-2 p-2">
     <TheHeader />
-    <RouterView />
+    <Loadable>
+      <RouterView />
+    </Loadable>
   </main>
 </template>
