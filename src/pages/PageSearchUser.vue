@@ -5,14 +5,17 @@ import TileUser from "@/components/TileUser.vue";
 
 const state = reactive({
   query: "",
+  sent: false,
   users: [] as User[],
 });
 
 const submit = async () => {
   if (state.query) {
     state.users = await searchUsers({ term: state.query });
+    state.sent = true;
   } else {
     state.users = [];
+    state.sent = false;
   }
 };
 </script>
@@ -34,12 +37,20 @@ const submit = async () => {
     </button>
   </form>
 
-  <TileUser
-    v-for="user in state.users"
-    class="py-2 my-2"
-    :user="user"
-    :key="user.handle"
-  />
+  <template v-if="state.sent && state.users.length <= 0">
+    <div class="empty">
+      <p class="empty-title h5">No Users Found</p>
+      <p class="empty-subtitle">Try a different search query again.</p>
+    </div>
+  </template>
+  <template v-if="state.users.length > 0">
+    <TileUser
+      v-for="user in state.users"
+      class="py-2 my-2"
+      :user="user"
+      :key="user.handle"
+    />
+  </template>
 </template>
 
 <style scoped>
