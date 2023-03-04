@@ -25,7 +25,7 @@ defineProps({
   </figure>
   <figure
     v-else
-    class="avatar avatar-${size}`"
+    :class="`avatar avatar-${size}`"
     :data-initial="(displayName || handle)[0]"
   ></figure>
 </template>

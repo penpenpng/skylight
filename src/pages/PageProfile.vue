@@ -48,9 +48,7 @@ const printUserObject = () => {
             <small class="text-dark d-block">@{{ user.handle }}</small>
           </div>
           <div v-if="settings.enabledDeveloperMode" class="column col-auto">
-            <button class="btn btn-outline" @click="printUserObject">
-              Print User Object
-            </button>
+            <button class="btn" @click="printUserObject">Print Object</button>
           </div>
         </div>
         <div class="panel-subtitle mx-2 mt-2">{{ user.description }}</div>

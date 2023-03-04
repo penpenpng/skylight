@@ -1,4 +1,4 @@
-import { reactive } from "vue";
+import { markRaw, reactive } from "vue";
 
 import { Feed, getTimeline } from "@/lib/atp";
 
@@ -34,5 +34,5 @@ export const refreshTimeline = async () => {
   }
 
   state.timelineCursor = cursor || null;
-  state.timeline = timeline;
+  state.timeline = markRaw(timeline);
 };

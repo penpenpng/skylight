@@ -10,6 +10,8 @@ const agent = new AtpAgent({
 
 let self: { did: string; handle: string } | null = null;
 
+const getCreatedAt = () => new Date().toISOString();
+
 export const tryResumeSession = async () => {
   const session = (() => {
     const sessStr = localStorage.getItem(SES_LOCAL_STORAGE_KEY);
@@ -78,7 +80,7 @@ export const getTimeline = async (params: {
 export const postText = async (text: string) =>
   agent.api.app.bsky.feed.post.create(
     { did: self?.did },
-    { text, createdAt: new Date().toISOString() }
+    { text, createdAt: getCreatedAt() }
   );
 
 export const searchUsers = async (params: { term: string }) => {
@@ -174,6 +176,26 @@ export const getMyFeed = async () => {
 
   return data;
 };
+
+export const repost = async (params: { uri: string; cid: string }) =>
+  agent.api.app.bsky.feed.repost.create(
+    { did: self?.did },
+    {
+      subject: params,
+      direction: "up",
+      createdAt: getCreatedAt(),
+    }
+  );
+
+export const upvotePost = async (params: { uri: string; cid: string }) =>
+  agent.api.app.bsky.feed.vote.create(
+    { did: self?.did },
+    {
+      subject: params,
+      direction: "up",
+      createdAt: getCreatedAt(),
+    }
+  );
 
 export type Feed = AtpResponse<typeof getTimeline>["feed"][number] & {
   post: { record: Record };

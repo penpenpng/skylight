@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { ref, PropType } from "vue";
+import { ref, PropType, toRaw } from "vue";
+
 import Avatar from "@/components/Avatar.vue";
+
 import { User, followUser, unfollowUser } from "@/lib/atp";
+import { useSettings } from "@/lib/settings";
 
 const props = defineProps({
   user: {
@@ -10,6 +13,7 @@ const props = defineProps({
   },
 });
 
+const settings = useSettings();
 const updatedFollowing = ref(false);
 
 const follow = async () => {
@@ -32,12 +36,15 @@ const unfollow = async () => {
     // Should display error
   }
 };
+const printUserObject = () => {
+  console.log(toRaw(props.user));
+};
 
 const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
 </script>
 
 <template>
-  <article class="tile">
+  <article class="tile hoverable">
     <div class="tile-icon">
       <Avatar
         :src="user.avatar"
@@ -67,15 +74,16 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
       >
         + Follow
       </button>
-      <button v-else class="btn btn-outline" @click="unfollow">
+      <button v-else class="btn" @click="unfollow">
         Unfollow (Not Implemented. Sorry!)
+      </button>
+      <button
+        v-if="settings.enabledDeveloperMode"
+        class="btn ml-2"
+        @click="printUserObject"
+      >
+        Print Object
       </button>
     </div>
   </article>
 </template>
-
-<style scoped>
-.tile:hover {
-  background: #f1f1fc;
-}
-</style>

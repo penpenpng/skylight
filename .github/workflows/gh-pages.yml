@@ -1,5 +1,5 @@
 # Simple workflow for deploying static content to GitHub Pages
-name: ph-page deployment
+name: ph-pages deployment
 
 on:
   # Runs on pushes targeting the default branch

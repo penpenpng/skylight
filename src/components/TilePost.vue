@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { PropType, computed, toRaw } from "vue";
-import { Entity, Feed } from "@/lib/atp";
+import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
+import { refreshTimeline } from "@/store";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
@@ -58,15 +59,17 @@ const replyTo = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="tile-post hoverable">
     <span v-if="repostedBy" class="chip mb-1 text-dark">
       <img :src="repostedBy.avatar" class="avatar avatar-sm" />
-      <span style="white-space: pre-line"
+      <span
+        class="width-repost-chip text-ellipsis d-inline-block"
+        style="max-width: 200px"
         >Reposted by
         <span class="text-primary">{{ repostedBy.name }}</span></span
       >
     </span>
-    <article class="tile" :class="{ 'ml-2': repostedBy }">
+    <article class="tile" :class="{ 'pl-2': repostedBy }">
       <div class="tile-icon">
         <figure v-if="post.author.avatar" class="avatar avatar-lg">
           <img :src="post.author.avatar" alt="" />
@@ -78,8 +81,10 @@ const replyTo = computed(() => {
         ></figure>
       </div>
       <div class="tile-content">
-        <div class="tile-title">
-          <span class="text-primary text-bold">
+        <div class="tile-title d-inline-flex">
+          <span
+            class="width-user-name text-primary text-bold text-ellipsis d-inline-block"
+          >
             {{ post.author.displayName || post.author.handle }}
           </span>
           <small class="text-gray ml-2">
@@ -90,34 +95,83 @@ const replyTo = computed(() => {
           <small v-if="replyTo" class="d-block mb-1">
             &gt; Replay to <span class="text-primary">{{ replyTo.name }}</span>
           </small>
-          <template
-            v-for="(e, idx) in getTextElements(
-              post.record.text,
-              post.record.entities || []
-            )"
-          >
-            <span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span>
-            <a v-else :href="e.href" target="_blank">{{ e.text }}</a>
-          </template>
+          <div class="pre-line wrap-anywhere">
+            <template
+              v-for="(e, idx) in getTextElements(
+                post.record.text,
+                post.record.entities || []
+              )"
+              ><span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span
+              ><a v-else :href="e.href" target="_blank">{{ e.text }}</a>
+            </template>
+          </div>
+        </div>
+        <div>
+          <div class="d-inline-block mr-2">
+            <button class="btn btn-link" disabled>
+              <i class="bi bi-reply" aria-label="reply"></i>
+            </button>
+            {{ post.replyCount }}
+          </div>
+          <div class="d-inline-block mr-2">
+            <button
+              class="btn btn-link"
+              @click="
+                repost({
+                  cid: post.cid,
+                  uri: post.uri,
+                }).then(refreshTimeline)
+              "
+            >
+              <i class="bi bi-repeat" aria-label="repost"></i>
+            </button>
+            {{ post.repostCount }}
+          </div>
+          <div class="d-inline-block">
+            <button
+              class="btn btn-link"
+              @click="
+                upvotePost({
+                  cid: post.cid,
+                  uri: post.uri,
+                }).then(refreshTimeline)
+              "
+            >
+              <i class="bi bi-heart" aria-label="like"></i>
+            </button>
+            {{ post.upvoteCount }}
+          </div>
         </div>
       </div>
-      <div v-if="settings.enabledDeveloperMode" class="tile-action">
-        <button class="btn btn-outline" @click="printFeedObject">
-          Print Feed Object
-        </button>
+      <div v-if="settings.enabledDeveloperMode">
+        <button class="btn" @click="printFeedObject">Print Object</button>
       </div>
     </article>
   </div>
 </template>
 
 <style scoped>
-.tile-subtitle a {
-  overflow-wrap: anywhere;
+.tile-post {
+  padding: 0.8rem 0.4rem 0.6rem;
+  border-bottom: 1px solid #e3e3e3;
 }
 
 .chip .avatar.avatar-right {
   margin-left: 0.2rem;
   margin-right: -0.4rem;
   float: right;
+}
+
+@media screen and (max-width: 600px) {
+  .width-repost-chip {
+    max-width: 200px;
+  }
+  .width-user-name {
+    max-width: 150px;
+  }
+}
+
+.btn-link {
+  padding: 0;
 }
 </style>
