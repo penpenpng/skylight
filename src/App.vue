@@ -11,3 +11,17 @@ import Loadable from "./components/Loadable.vue";
     </Loadable>
   </main>
 </template>
+
+<style>
+.pre-line {
+  white-space: pre-line;
+}
+
+.hoverable:hover {
+  background: #f1f1fc;
+}
+
+.wrap-anywhere {
+  overflow-wrap: anywhere;
+}
+</style>

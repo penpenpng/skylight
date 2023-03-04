@@ -10,10 +10,5 @@ if (state.timeline.length <= 0) {
 </script>
 
 <template>
-  <TilePost
-    v-for="feed in state.timeline"
-    :feed="feed"
-    :key="feed.post.cid"
-    class="py-2 my-2"
-  />
+  <TilePost v-for="feed in state.timeline" :feed="feed" :key="feed.post.cid" />
 </template>

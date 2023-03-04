@@ -58,15 +58,17 @@ const replyTo = computed(() => {
 </script>
 
 <template>
-  <div>
+  <div class="tile-post hoverable">
     <span v-if="repostedBy" class="chip mb-1 text-dark">
       <img :src="repostedBy.avatar" class="avatar avatar-sm" />
-      <span style="white-space: pre-line"
+      <span
+        class="pre-line text-ellipsis d-inline-block"
+        style="max-width: 200px"
         >Reposted by
         <span class="text-primary">{{ repostedBy.name }}</span></span
       >
     </span>
-    <article class="tile" :class="{ 'ml-2': repostedBy }">
+    <article class="tile" :class="{ 'pl-2': repostedBy }">
       <div class="tile-icon">
         <figure v-if="post.author.avatar" class="avatar avatar-lg">
           <img :src="post.author.avatar" alt="" />
@@ -78,8 +80,11 @@ const replyTo = computed(() => {
         ></figure>
       </div>
       <div class="tile-content">
-        <div class="tile-title">
-          <span class="text-primary text-bold">
+        <div class="tile-title d-inline-flex">
+          <span
+            class="text-primary text-bold text-ellipsis d-inline-block"
+            style="max-width: 150px"
+          >
             {{ post.author.displayName || post.author.handle }}
           </span>
           <small class="text-gray ml-2">
@@ -90,29 +95,43 @@ const replyTo = computed(() => {
           <small v-if="replyTo" class="d-block mb-1">
             &gt; Replay to <span class="text-primary">{{ replyTo.name }}</span>
           </small>
-          <template
-            v-for="(e, idx) in getTextElements(
-              post.record.text,
-              post.record.entities || []
-            )"
-          >
-            <span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span>
-            <a v-else :href="e.href" target="_blank">{{ e.text }}</a>
-          </template>
+          <div class="pre-line wrap-anywhere">
+            <template
+              v-for="(e, idx) in getTextElements(
+                post.record.text,
+                post.record.entities || []
+              )"
+              ><span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span
+              ><a v-else :href="e.href" target="_blank">{{ e.text }}</a>
+            </template>
+          </div>
+        </div>
+        <div class="mt-1">
+          <div class="d-inline-block mr-2">
+            <i class="bi bi-reply" aria-label="reply"></i>
+            {{ post.replyCount }}
+          </div>
+          <div class="d-inline-block mr-2">
+            <i class="bi bi-repeat" aria-label="repost"></i>
+            {{ post.repostCount }}
+          </div>
+          <div class="d-inline-block">
+            <i class="bi bi-heart" aria-label="like"></i>
+            {{ post.upvoteCount }}
+          </div>
         </div>
       </div>
-      <div v-if="settings.enabledDeveloperMode" class="tile-action">
-        <button class="btn btn-outline" @click="printFeedObject">
-          Print Feed Object
-        </button>
+      <div v-if="settings.enabledDeveloperMode">
+        <button class="btn" @click="printFeedObject">Print Object</button>
       </div>
     </article>
   </div>
 </template>
 
 <style scoped>
-.tile-subtitle a {
-  overflow-wrap: anywhere;
+.tile-post {
+  padding: 0.8rem 0.4rem 0.6rem;
+  border-bottom: 1px solid #e3e3e3;
 }
 
 .chip .avatar.avatar-right {
