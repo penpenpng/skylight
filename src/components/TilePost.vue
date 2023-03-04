@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { PropType, computed, toRaw } from "vue";
-import { Entity, Feed } from "@/lib/atp";
+import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
+import { refreshTimeline } from "@/store";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
@@ -62,7 +63,7 @@ const replyTo = computed(() => {
     <span v-if="repostedBy" class="chip mb-1 text-dark">
       <img :src="repostedBy.avatar" class="avatar avatar-sm" />
       <span
-        class="pre-line text-ellipsis d-inline-block"
+        class="width-repost-chip text-ellipsis d-inline-block"
         style="max-width: 200px"
         >Reposted by
         <span class="text-primary">{{ repostedBy.name }}</span></span
@@ -82,8 +83,7 @@ const replyTo = computed(() => {
       <div class="tile-content">
         <div class="tile-title d-inline-flex">
           <span
-            class="text-primary text-bold text-ellipsis d-inline-block"
-            style="max-width: 150px"
+            class="width-user-name text-primary text-bold text-ellipsis d-inline-block"
           >
             {{ post.author.displayName || post.author.handle }}
           </span>
@@ -106,17 +106,39 @@ const replyTo = computed(() => {
             </template>
           </div>
         </div>
-        <div class="mt-1">
+        <div>
           <div class="d-inline-block mr-2">
-            <i class="bi bi-reply" aria-label="reply"></i>
+            <button class="btn btn-link" disabled>
+              <i class="bi bi-reply" aria-label="reply"></i>
+            </button>
             {{ post.replyCount }}
           </div>
           <div class="d-inline-block mr-2">
-            <i class="bi bi-repeat" aria-label="repost"></i>
+            <button
+              class="btn btn-link"
+              @click="
+                repost({
+                  cid: post.cid,
+                  uri: post.uri,
+                }).then(refreshTimeline)
+              "
+            >
+              <i class="bi bi-repeat" aria-label="repost"></i>
+            </button>
             {{ post.repostCount }}
           </div>
           <div class="d-inline-block">
-            <i class="bi bi-heart" aria-label="like"></i>
+            <button
+              class="btn btn-link"
+              @click="
+                upvotePost({
+                  cid: post.cid,
+                  uri: post.uri,
+                }).then(refreshTimeline)
+              "
+            >
+              <i class="bi bi-heart" aria-label="like"></i>
+            </button>
             {{ post.upvoteCount }}
           </div>
         </div>
@@ -138,5 +160,18 @@ const replyTo = computed(() => {
   margin-left: 0.2rem;
   margin-right: -0.4rem;
   float: right;
+}
+
+@media screen and (max-width: 600px) {
+  .width-repost-chip {
+    max-width: 200px;
+  }
+  .width-user-name {
+    max-width: 150px;
+  }
+}
+
+.btn-link {
+  padding: 0;
 }
 </style>
