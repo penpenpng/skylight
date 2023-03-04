@@ -56,7 +56,7 @@ const repostedBy = computed(() => {
         Reposted by <span class="text-primary">{{ repostedBy.name }}</span>
       </span>
     </span>
-    <div class="tile" :class="{ 'ml-2': repostedBy }">
+    <article class="tile" :class="{ 'ml-2': repostedBy }">
       <div class="tile-icon">
         <figure v-if="post.author.avatar" class="avatar avatar-lg">
           <img :src="post.author.avatar" alt="" />
@@ -93,7 +93,7 @@ const repostedBy = computed(() => {
           Print Feed Object
         </button>
       </div>
-    </div>
+    </article>
   </div>
 </template>
 

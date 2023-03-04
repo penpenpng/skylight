@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, PropType } from "vue";
+import Avatar from "@/components/Avatar.vue";
 import { User, followUser, unfollowUser } from "@/lib/atp";
 
 const props = defineProps({
@@ -36,16 +37,13 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
 </script>
 
 <template>
-  <div class="tile" style="max-width: 800px">
+  <article class="tile">
     <div class="tile-icon">
-      <figure v-if="user.avatar" class="avatar avatar-lg">
-        <img :src="user.avatar" alt="" />
-      </figure>
-      <figure
-        v-else
-        class="avatar avatar-lg"
-        :data-initial="(user.displayName || user.handle)[0]"
-      ></figure>
+      <Avatar
+        :src="user.avatar"
+        :display-name="user.displayName"
+        :handle="user.handle"
+      />
     </div>
     <div class="tile-content">
       <div class="tile-title">
@@ -73,7 +71,7 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
         Unfollow (Not Implemented. Sorry!)
       </button>
     </div>
-  </div>
+  </article>
 </template>
 
 <style scoped>
