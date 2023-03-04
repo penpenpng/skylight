@@ -42,9 +42,18 @@ const printFeedObject = () => {
 
 const post = computed(() => props.feed.post);
 const repostedBy = computed(() => {
-  const by = props.feed.reason?.by as any;
+  const user = props.feed.reason?.by as any;
 
-  return by ? { name: by.displayName || by.handle, avatar: by.avatar } : null;
+  return user
+    ? { name: user.displayName || user.handle, avatar: user.avatar }
+    : null;
+});
+const replyTo = computed(() => {
+  const user = props.feed.reply?.parent.author;
+
+  return user
+    ? { name: user.displayName || user.handle, avatar: user.avatar }
+    : null;
 });
 </script>
 
@@ -52,9 +61,10 @@ const repostedBy = computed(() => {
   <div>
     <span v-if="repostedBy" class="chip mb-1 text-dark">
       <img :src="repostedBy.avatar" class="avatar avatar-sm" />
-      <span style="white-space: pre-line">
-        Reposted by <span class="text-primary">{{ repostedBy.name }}</span>
-      </span>
+      <span style="white-space: pre-line"
+        >Reposted by
+        <span class="text-primary">{{ repostedBy.name }}</span></span
+      >
     </span>
     <article class="tile" :class="{ 'ml-2': repostedBy }">
       <div class="tile-icon">
@@ -77,6 +87,9 @@ const repostedBy = computed(() => {
           </small>
         </div>
         <div class="tile-subtitle">
+          <small v-if="replyTo" class="d-block mb-1">
+            &gt; Replay to <span class="text-primary">{{ replyTo.name }}</span>
+          </small>
           <template
             v-for="(e, idx) in getTextElements(
               post.record.text,
@@ -100,5 +113,11 @@ const repostedBy = computed(() => {
 <style scoped>
 .tile-subtitle a {
   overflow-wrap: anywhere;
+}
+
+.chip .avatar.avatar-right {
+  margin-left: 0.2rem;
+  margin-right: -0.4rem;
+  float: right;
 }
 </style>
