@@ -18,7 +18,7 @@ const assumeLogin: RouteRecordRaw["beforeEnter"] = async (to, from, next) => {
 };
 
 export const router = createRouter({
-  history: createWebHashHistory("/skylight/dist/"),
+  history: createWebHashHistory("/skylight/"),
   routes: [
     {
       name: "login",
