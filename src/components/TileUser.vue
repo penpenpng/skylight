@@ -52,7 +52,7 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
         <span class="text-primary text-bold">
           {{ user.displayName || user.handle }}
         </span>
-        <small class="text-gray ml-2">({{ user.handle }})</small>
+        <small class="text-dark ml-2">@{{ user.handle }}</small>
         <span v-if="!!user.viewer?.followedBy" class="chip ml-2"
           >Follows You</span
         >

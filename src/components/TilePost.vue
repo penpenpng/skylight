@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { PropType, computed } from "vue";
+import { PropType, computed, toRaw } from "vue";
 import { Entity, Feed } from "@/lib/atp";
+import { useSettings } from "@/lib/settings";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
 });
+const settings = useSettings();
 
 const getTextElements = (text: string, entities: Entity[]) => {
   const arr: Array<
@@ -33,6 +35,9 @@ const getTextElements = (text: string, entities: Entity[]) => {
   });
 
   return arr;
+};
+const printFeedObject = () => {
+  console.log(toRaw(props.feed));
 };
 
 const post = computed(() => props.feed.post);
@@ -82,6 +87,11 @@ const repostedBy = computed(() => {
             <a v-else :href="e.href" target="_blank">{{ e.text }}</a>
           </template>
         </div>
+      </div>
+      <div v-if="settings.enabledDeveloperMode" class="tile-action">
+        <button class="btn btn-outline" @click="printFeedObject">
+          Print Feed Object
+        </button>
       </div>
     </div>
   </div>

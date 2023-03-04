@@ -105,6 +105,9 @@ export const followUser = async (params: { did: string; cid: string }) =>
 export const unfollowUser = async (params: { did: string; rkey: string }) =>
   agent.api.app.bsky.graph.follow.delete(params);
 
+export const getProfile = async () =>
+  agent.api.app.bsky.actor.getProfile({ actor: "" });
+
 export type Feed = AtpResponse<typeof getTimeline>["feed"][number] & {
   post: { record: Record };
 };
