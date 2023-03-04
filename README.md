@@ -2,4 +2,4 @@
 
 Minimal bsky web client implementation.
 
-https://penpenpng.github.io/skylight/dist/
+https://penpenpng.github.io/skylight/
