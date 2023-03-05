@@ -93,7 +93,7 @@ const replyTo = computed(() => {
         </div>
         <div class="tile-subtitle">
           <small v-if="replyTo" class="d-block mb-1">
-            &gt; Replay to <span class="text-primary">{{ replyTo.name }}</span>
+            &gt; Replied to <span class="text-primary">{{ replyTo.name }}</span>
           </small>
           <div class="pre-line wrap-anywhere">
             <template
