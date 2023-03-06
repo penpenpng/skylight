@@ -6,11 +6,20 @@ import Loadable from "./components/Loadable.vue";
 <template>
   <main class="m-2 p-2">
     <TheHeader />
-    <Loadable>
-      <RouterView />
-    </Loadable>
+
+    <div class="main-view">
+      <Loadable>
+        <RouterView />
+      </Loadable>
+    </div>
   </main>
 </template>
+
+<style scoped>
+.main-view {
+  z-index: 1;
+}
+</style>
 
 <style>
 .pre-line {

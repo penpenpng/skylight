@@ -68,45 +68,47 @@ const onkeydown = (ev: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="input-group my-2">
-    <textarea
-      v-model="state.text"
-      type="text"
-      class="form-input"
-      placeholder="What's up?"
-      @keydown="onkeydown"
-    />
-  </div>
-
-  <div class="d-flex">
-    <div>
-      <span
-        v-for="({ url, id }, idx) in state.urls.filter((e) => e.includes)"
-        :key="id"
-        class="chip"
-      >
-        <i class="bi bi-link-45deg"></i>
-        <a
-          :href="url"
-          class="text-ellipsis d-inline-block"
-          target="_blank"
-          style="max-width: 200px"
-          >{{ url }}</a
-        >
-        <a
-          href="#"
-          class="btn btn-clear"
-          aria-label="Close"
-          role="button"
-          @click="state.urls[idx].includes = false"
-        ></a>
-      </span>
+  <div>
+    <div class="input-group my-2">
+      <textarea
+        v-model="state.text"
+        type="text"
+        class="form-input"
+        placeholder="What's up?"
+        @keydown="onkeydown"
+      />
     </div>
-    <ButtonAsync
-      class="btn btn-primary input-group-btn column col-auto col-ml-auto"
-      :onClick="submit"
-    >
-      Submit
-    </ButtonAsync>
+
+    <div class="d-flex">
+      <ButtonAsync
+        class="btn btn-primary input-group-btn column col-auto"
+        :onClick="submit"
+      >
+        Submit
+      </ButtonAsync>
+      <div class="px-2">
+        <span
+          v-for="({ url, id }, idx) in state.urls.filter((e) => e.includes)"
+          :key="id"
+          class="chip"
+        >
+          <i class="bi bi-link-45deg"></i>
+          <a
+            :href="url"
+            class="text-ellipsis d-inline-block"
+            target="_blank"
+            style="max-width: 200px"
+            >{{ url }}</a
+          >
+          <a
+            href="#"
+            class="btn btn-clear"
+            aria-label="Close"
+            role="button"
+            @click="state.urls[idx].includes = false"
+          ></a>
+        </span>
+      </div>
+    </div>
   </div>
 </template>

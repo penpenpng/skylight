@@ -8,7 +8,7 @@ import ButtonAsync from "@/components/ButtonAsync.vue";
 </script>
 
 <template>
-  <InputPost />
+  <InputPost class="input-post" />
 
   <div class="columns col-oneline p-2">
     <ButtonAsync
