@@ -4,12 +4,12 @@ import { AtUri } from "@atproto/uri";
 
 import Avatar from "@/components/Avatar.vue";
 
-import { User, followUser, unfollowUser } from "@/lib/atp";
+import { Actor, ActorDetail, followUser, unfollowUser } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
 
 const props = defineProps({
   user: {
-    type: Object as PropType<User>,
+    type: Object as PropType<ActorDetail | Actor>,
     required: true,
   },
 });
@@ -20,7 +20,10 @@ const followingUri = ref(props.user.viewer?.following);
 
 const follow = async () => {
   try {
-    const { uri } = await followUser({ did: props.user.did, cid: props.user.declaration.cid });
+    const { uri } = await followUser({
+      did: props.user.did,
+      cid: props.user.declaration.cid,
+    });
     followingUri.value = uri;
     updatedFollowing.value = !updatedFollowing.value;
   } catch {
@@ -69,7 +72,7 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
         >
       </div>
       <div class="tile-subtitle">
-        {{ user.description }}
+        {{ (user as ActorDetail).description || "" }}
       </div>
     </div>
     <div class="tile-action mx-2">

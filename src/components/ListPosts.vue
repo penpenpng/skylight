@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import TilePost from "@/components/TilePost.vue";
-import { getMyFeed, Feed } from "@/lib/atp";
+import { getMyFeed } from "@/lib/atp";
 
-const feeds = (await getMyFeed()).feed as Feed[];
+const [feeds] = await getMyFeed();
 </script>
 
 <template>

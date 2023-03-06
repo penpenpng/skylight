@@ -1,17 +1,18 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { searchUsers, User } from "@/lib/atp";
+import { searchUsers, ActorDetail } from "@/lib/atp";
 import TileUser from "@/components/TileUser.vue";
 
 const state = reactive({
   query: "",
   sent: false,
-  users: [] as User[],
+  users: [] as ActorDetail[],
 });
 
 const submit = async () => {
   if (state.query) {
-    state.users = await searchUsers({ term: state.query });
+    const [users] = await searchUsers({ term: state.query });
+    state.users = users;
     state.sent = true;
   } else {
     state.users = [];

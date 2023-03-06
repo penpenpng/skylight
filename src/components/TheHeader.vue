@@ -15,6 +15,10 @@ const tabs = [
     label: "Home",
   },
   {
+    routeName: "notifications",
+    label: "Noti",
+  },
+  {
     routeName: "search",
     label: "Search",
   },

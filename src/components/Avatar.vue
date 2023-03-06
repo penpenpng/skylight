@@ -22,6 +22,7 @@ defineProps({
 <template>
   <figure v-if="src" :class="`avatar avatar-${size}`">
     <img :src="src" alt="" />
+    <slot />
   </figure>
   <figure
     v-else
