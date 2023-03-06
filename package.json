@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git+https://github.com/penpenpng/skylight.git"
   },
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
