@@ -26,13 +26,14 @@ const login = async () => {
 
   <form @submit.prevent="login" :class="{ 'has-error': state.hasError }">
     <div class="form-group">
-      <label class="form-label" for="identifier">Identifier (Email)</label>
+      <label class="form-label" for="identifier"
+        >Identifier (email or handle)</label
+      >
       <input
         v-model="state.identifier"
         class="form-input"
         type="text"
         id="identifier"
-        placeholder="your.email@example.com"
         @input="state.hasError = false"
       />
     </div>

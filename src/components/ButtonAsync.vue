@@ -5,6 +5,9 @@ const props = defineProps({
   onClick: {
     type: Function,
   },
+  forceLoading: {
+    type: Boolean,
+  },
 });
 
 const loading = ref(false);
@@ -21,7 +24,7 @@ const handler = async () => {
 </script>
 
 <template>
-  <button :class="{ loading }" @click="handler">
+  <button :class="{ loading: loading || forceLoading }" @click="handler">
     <slot />
   </button>
 </template>
