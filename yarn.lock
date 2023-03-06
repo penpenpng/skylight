@@ -24,6 +24,11 @@
   resolved "https://registry.yarnpkg.com/@atproto/nsid/-/nsid-0.0.1.tgz#0cdc00cefe8f0b1385f352b9f57b3ad37fff09a4"
   integrity sha512-t5M6/CzWBVYoBbIvfKDpqPj/+ZmyoK9ydZSStcTXosJ27XXwOPhz0VDUGKK2SM9G5Y7TPes8S5KTAU0UdVYFCw==
 
+"@atproto/uri@^0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@atproto/uri/-/uri-0.0.1.tgz#bfab68eda17ec987647f10d102168d417bc8a326"
+  integrity sha512-Tm+20Bxdie+a4yvberrfWaDhrze/p3AvA5v5IV6XyZJYu2+fnionUrufUjkcs3PIWeSd6VMgVcRp3GaoiUvSvQ==
+
 "@atproto/xrpc@*":
   version "0.0.4"
   resolved "https://registry.yarnpkg.com/@atproto/xrpc/-/xrpc-0.0.4.tgz#d7dd45cdb21e29b9715ca30eb18320548f293413"
