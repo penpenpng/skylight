@@ -7,6 +7,7 @@ import ButtonAsync from "@/components/ButtonAsync.vue";
 import { postText, ReplyRef } from "@/lib/atp";
 import { smartMerge, debounce } from "@/lib/algorithm";
 import { refreshTimeline } from "@/store";
+import { findDir } from "@vue/compiler-core";
 
 const emits = defineEmits<{
   (ev: "success"): void;
@@ -29,12 +30,14 @@ interface State {
     indices: [number, number];
     includes: boolean;
   }[];
+  loading: boolean;
 }
 
 let nextId = 1;
 const state = reactive<State>({
   text: "",
   urls: [],
+  loading: false,
 });
 
 const updateUrls = () => {
@@ -51,7 +54,6 @@ const updateUrls = () => {
     (a, b) => ({ ...a, indices: b.indices })
   );
 };
-
 const debouncedUpdateUrls = debounce(updateUrls, DEBOUNCE_INTERVAL);
 
 watch(() => state.text, debouncedUpdateUrls);
@@ -67,6 +69,7 @@ const submit = async () => {
 
   state.text = "";
   state.urls = [];
+  state.loading = true;
 
   try {
     await postText({ text, urls, reply: props?.replay });
@@ -74,6 +77,8 @@ const submit = async () => {
     emits("success");
   } catch {
     emits("error");
+  } finally {
+    state.loading = false;
   }
 };
 const onkeydown = (ev: KeyboardEvent) => {
@@ -99,6 +104,7 @@ const onkeydown = (ev: KeyboardEvent) => {
       <ButtonAsync
         class="btn btn-primary input-group-btn column col-auto"
         :onClick="submit"
+        :force-loading="state.loading"
       >
         Submit
       </ButtonAsync>
