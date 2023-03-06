@@ -22,6 +22,15 @@ import Loadable from "./components/Loadable.vue";
 </style>
 
 <style>
+.btn-link.btn-icon {
+  padding: 0;
+  height: 1.1rem;
+  width: 1.1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .pre-line {
   white-space: pre-line;
 }

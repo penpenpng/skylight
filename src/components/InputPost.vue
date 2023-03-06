@@ -1,11 +1,22 @@
 <script setup lang="ts">
-import { reactive, watch, toRaw } from "vue";
+import { reactive, watch, toRaw, PropType } from "vue";
 import twtext from "twitter-text";
 
-import { postText } from "@/lib/atp";
+import ButtonAsync from "@/components/ButtonAsync.vue";
+
+import { postText, ReplyRef } from "@/lib/atp";
 import { smartMerge, debounce } from "@/lib/algorithm";
 import { refreshTimeline } from "@/store";
-import ButtonAsync from "./ButtonAsync.vue";
+
+const emits = defineEmits<{
+  (ev: "success"): void;
+  (ev: "error"): void;
+}>();
+const props = defineProps({
+  replay: {
+    type: Object as PropType<ReplyRef>,
+  },
+});
 
 const DEBOUNCE_INTERVAL = 500;
 const MAX_PARSABLE_URL = 4;
@@ -57,8 +68,13 @@ const submit = async () => {
   state.text = "";
   state.urls = [];
 
-  await postText({ text, urls });
-  refreshTimeline();
+  try {
+    await postText({ text, urls, reply: props?.replay });
+    refreshTimeline();
+    emits("success");
+  } catch {
+    emits("error");
+  }
 };
 const onkeydown = (ev: KeyboardEvent) => {
   if ((ev.ctrlKey || ev.metaKey) && ev.key === "Enter") {
