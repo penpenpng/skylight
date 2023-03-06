@@ -10,10 +10,8 @@ const props = defineProps({
   },
 });
 
-const users =
-  props.kind === "follows"
-    ? (await getMyFollows()).follows
-    : (await getMyFollowers()).followers;
+const [{ users }] =
+  props.kind === "follows" ? await getMyFollows() : await getMyFollowers();
 </script>
 
 <template>

@@ -125,13 +125,13 @@ const replyTarget = computed(() => {
           <TilePostActionButton
             aria-label="reply"
             icon-class="bi bi-reply"
-            @click="expandedInput = true"
+            @click="expandedInput = !expandedInput"
           >
             {{ post.replyCount }}
           </TilePostActionButton>
           <TilePostActionButton
             aria-label="repost"
-            icon-class="bi bi-repeat"
+            icon-class="bi bi-megaphone"
             @click="
               repost({
                 cid: post.cid,

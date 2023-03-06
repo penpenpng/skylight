@@ -10,6 +10,8 @@ const agent = new AtpAgent({
 
 let self: { did: string; handle: string } | null = null;
 
+type CursoredResponse<T> = Promise<[data: T, cursor?: string]>;
+
 const getCreatedAt = () => new Date().toISOString();
 
 export const tryResumeSession = async () => {
@@ -60,21 +62,27 @@ export const deleteSession = () => {
   self = null;
 };
 
-export type AtpResponse<T extends (...arg: any) => any> = Awaited<
-  ReturnType<T>
->;
-
 export const getTimeline = async (params: {
   limit?: number;
   cursor?: string;
-}) => {
+}): CursoredResponse<Feed[]> => {
   const { success, data } = await agent.api.app.bsky.feed.getTimeline(params);
 
   if (!success) {
     throw new Error("getTimeline failed");
   }
 
-  return data;
+  return [data.feed as unknown as Feed[], data.cursor];
+};
+
+export const getNotifications = async (): CursoredResponse<Notification[]> => {
+  const { success, data } = await agent.api.app.bsky.notification.list();
+
+  if (!success) {
+    throw new Error("getTimeline failed");
+  }
+
+  return [data.notifications as unknown as Notification[], data.cursor];
 };
 
 export const postText = async (params: {
@@ -96,20 +104,22 @@ export const postText = async (params: {
         },
         value: url,
       })),
-      reply,
+      reply: reply as any,
       createdAt: getCreatedAt(),
     }
   );
 };
 
-export const searchUsers = async (params: { term: string }) => {
+export const searchUsers = async (params: {
+  term: string;
+}): CursoredResponse<ActorDetail[]> => {
   const { success, data } = await agent.api.app.bsky.actor.search(params);
 
   if (!success) {
     throw new Error("searchUsers failed");
   }
 
-  return data.users;
+  return [data.users as ActorDetail[], data.cursor];
 };
 
 export const followUser = async (params: { did: string; cid: string }) =>
@@ -124,7 +134,7 @@ export const followUser = async (params: { did: string; cid: string }) =>
 export const unfollowUser = async (params: { did: string; rkey: string }) =>
   agent.api.app.bsky.graph.follow.delete(params);
 
-export const getMyProfile = async () => {
+export const getMyProfile = async (): Promise<ActorProfile> => {
   const handle = self?.handle;
 
   if (!handle) {
@@ -139,10 +149,13 @@ export const getMyProfile = async () => {
     throw new Error("getMyProfile failed");
   }
 
-  return data;
+  return data as ActorProfile;
 };
 
-export const getMyFollows = async () => {
+export const getMyFollows = async (): CursoredResponse<{
+  subject: Actor;
+  users: Actor[];
+}> => {
   const handle = self?.handle;
 
   if (!handle) {
@@ -157,10 +170,16 @@ export const getMyFollows = async () => {
     throw new Error("getMyFollows failed");
   }
 
-  return data;
+  return [
+    { subject: data.subject as Actor, users: data.follows as Actor[] },
+    data.cursor,
+  ];
 };
 
-export const getMyFollowers = async () => {
+export const getMyFollowers = async (): CursoredResponse<{
+  subject: Actor;
+  users: Actor[];
+}> => {
   const handle = self?.handle;
 
   if (!handle) {
@@ -175,10 +194,13 @@ export const getMyFollowers = async () => {
     throw new Error("getMyFollowers failed");
   }
 
-  return data;
+  return [
+    { subject: data.subject as Actor, users: data.follows as Actor[] },
+    data.cursor,
+  ];
 };
 
-export const getMyFeed = async () => {
+export const getMyFeed = async (): CursoredResponse<Feed[]> => {
   const handle = self?.handle;
 
   if (!handle) {
@@ -193,7 +215,7 @@ export const getMyFeed = async () => {
     throw new Error("getMyFollowers failed");
   }
 
-  return data;
+  return [data.feed as unknown as Feed[], data.cursor];
 };
 
 export const repost = async (params: { uri: string; cid: string }) =>
@@ -216,35 +238,185 @@ export const upvotePost = async (params: { uri: string; cid: string }) =>
     }
   );
 
-export type Feed = AtpResponse<typeof getTimeline>["feed"][number] & {
-  post: { record: Record };
-};
-export type Post = Feed["post"];
+export const getPost = async (params: {
+  uri: string;
+}): Promise<Post | null> => {
+  const thread = await getPostThread({ ...params, depth: 0 });
 
-// $type: app.bsky.feed.post
-export interface Record {
-  text: string;
-  embed?: {
-    external?: {
-      title?: string;
-      description?: string;
-      uri?: string;
-      thumbs: {
-        cid: string;
-        mineType: string;
-      };
-    };
+  if (!thread.notFound) {
+    return thread.post;
+  } else {
+    return null;
+  }
+};
+
+export const getPostThread = async (params: {
+  uri: string;
+  depth?: number;
+}): Promise<PostThread> => {
+  const { success, data } = await agent.api.app.bsky.feed.getPostThread(params);
+
+  if (!success) {
+    throw new Error("getPostThread failed");
+  }
+
+  return data.thread as unknown as PostThread;
+};
+
+export interface Feed {
+  post: Post;
+  reply?: {
+    parent: Post;
+    root: Post;
   };
-  entities?: Entity[];
+  reason?: Reason.Repost;
 }
 
-export type Entity = {
-  type: "link";
+export interface Post {
+  uri: string;
+  cid: string;
+  author: Actor;
+  record: Record.Post;
+  embed?: Embed.Image | Embed.External | Embed.Record;
+  replyCount: number;
+  repostCount: number;
+  upvoteCount: number;
+  downvoteCount: number;
+  indexedAt: string;
+  viewer: Viewer.Post;
+}
+
+export interface Actor {
+  did: string;
+  declaration: Declaration;
+  handle: string;
+  displayName?: string;
+  avatar?: string;
+  viewer?: Viewer.Actor;
+}
+
+export interface ActorDetail {
+  did: string;
+  declaration: Declaration;
+  handle: string;
+  displayName?: string;
+  description?: string;
+  avatar?: string;
+  indexedAt?: string;
+  viewer?: Viewer.Actor;
+}
+
+export interface ActorProfile {
+  did: string;
+  declaration: Declaration;
+  handle: string;
+  displayName?: string;
+  description?: string;
+  avatar?: string;
+  banner?: string;
+  followersCount: number;
+  followsCount: number;
+  postsCount: number;
+  creator: string;
+  indexedAt?: string;
+  viewer?: Viewer.Actor;
+  myState?: {
+    follow?: string;
+    muted?: boolean;
+  };
+}
+
+export interface Declaration {
+  cid: string;
+  actorType: "app.bsky.system.actorUser";
+}
+
+export namespace Reason {
+  export interface Repost {
+    by: Actor;
+    indexedAt: string;
+  }
+}
+
+export namespace Embed {
+  export interface Image {
+    images: {
+      thumb: string;
+      fullsize: string;
+      alt: string;
+    }[];
+  }
+
+  export interface External {
+    external: {
+      uri: string;
+      title: string;
+      description: string;
+      thumb?: string;
+    };
+  }
+
+  export interface Record {
+    record:
+      | {
+          uri: string;
+          cid: string;
+          author: Actor;
+          record: {};
+        }
+      | {
+          uri: string;
+        };
+  }
+}
+
+export namespace Viewer {
+  export interface Actor {
+    muted?: boolean;
+    following?: string;
+    followedBy?: string;
+  }
+
+  export interface Post {
+    repost?: string;
+    upvote?: string;
+    downvote?: string;
+  }
+}
+
+export namespace Record {
+  export interface Post {
+    createdAt: string;
+    text: string;
+    embed?: {
+      external?: Embed.External;
+    };
+    entities?: Entity[];
+    reply?: ReplyRef;
+  }
+
+  export interface Vote {
+    createdAt: string;
+    direction: "up" | "down";
+    subject: { cid: string; uri: string };
+  }
+
+  export interface Repost {
+    createdAt: string;
+    subject: { cid: string; uri: string };
+  }
+
+  export interface Follow {
+    createdAt: string;
+    subject: { declarationCid: string; did: string };
+  }
+}
+
+export interface Entity {
+  type: "link" | "mention";
   index: { start: number; end: number };
   value: string;
-};
-
-export type User = AtpResponse<typeof searchUsers>[number];
+}
 
 export interface ReplyRef {
   root: {
@@ -255,5 +427,34 @@ export interface ReplyRef {
     cid: string;
     uri: string;
   };
-  [k: string]: unknown;
 }
+
+export type PostThread =
+  | {
+      notFound: undefined; // Not actually present, but for convenience.
+      post: Post;
+      parent?: PostThread;
+      replies?: PostThread[];
+    }
+  | {
+      notFound: true;
+      uri: string;
+    };
+
+type NotificationOf<K, R> = {
+  uri: string;
+  cid: string;
+  author: Actor;
+  reason: K;
+  reasonSubject?: string;
+  record: R;
+  isRead: boolean;
+  indexedAt: string;
+};
+
+export type Notification =
+  | NotificationOf<"vote", Record.Vote>
+  | NotificationOf<"repost", Record.Repost>
+  | NotificationOf<"follow", Record.Follow>
+  | NotificationOf<"mention", Record.Post>
+  | NotificationOf<"reply", Record.Post>;

@@ -1,21 +1,31 @@
-import { markRaw, reactive } from "vue";
+import { shallowReactive } from "vue";
 
-import { Feed, getTimeline } from "@/lib/atp";
+import {
+  Feed,
+  getNotifications,
+  getTimeline,
+  Post,
+  getPost,
+  Notification,
+} from "@/lib/atp";
 
+// TODO: 整理する
 interface State {
-  timelineCursor: string | null;
   timeline: Feed[];
+  notifications: Notification[];
+  posts: Record<string, Post>;
 }
 
-const state = reactive<State>({
-  timelineCursor: null,
+const state = shallowReactive<State>({
   timeline: [],
+  notifications: [],
+  posts: shallowReactive({}),
 });
 
 export const useState = (): Readonly<State> => state;
 
 export const refreshTimeline = async () => {
-  const { feed, cursor } = await getTimeline({
+  const [feed] = await getTimeline({
     limit: 100,
   });
 
@@ -33,6 +43,26 @@ export const refreshTimeline = async () => {
     timeline.push(f);
   }
 
-  state.timelineCursor = cursor || null;
-  state.timeline = markRaw(timeline);
+  state.timeline = timeline;
+};
+
+export const refreshNotification = async () => {
+  const posts: Record<string, Post> = shallowReactive({});
+  const [notifications] = await getNotifications();
+
+  for (const { reason, record } of notifications) {
+    if (reason === "vote" || reason === "repost") {
+      const uri = record.subject.uri;
+      if (state.posts[uri]) {
+        posts[uri] = state.posts[uri];
+      } else {
+        getPost({ uri }).then((post) => {
+          if (post) posts[uri] = post;
+        });
+      }
+    }
+  }
+
+  state.posts = posts;
+  state.notifications = notifications;
 };

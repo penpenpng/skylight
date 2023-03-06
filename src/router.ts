@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 
 import PageLogin from "@/pages/PageLogin.vue";
 import PageIndex from "@/pages/PageIndex.vue";
+import PageNoti from "@/pages/PageNoti.vue";
 import PageSearchUser from "@/pages/PageSearchUser.vue";
 import PageProfile from "@/pages/PageProfile.vue";
 import PageSettings from "@/pages/PageSettings.vue";
@@ -29,6 +30,12 @@ export const router = createRouter({
       name: "index",
       path: "/",
       component: PageIndex,
+      beforeEnter: assumeLogin,
+    },
+    {
+      name: "notifications",
+      path: "/notifications",
+      component: PageNoti,
       beforeEnter: assumeLogin,
     },
     {
