@@ -1,13 +1,19 @@
 <script setup lang="ts">
-import { PropType, computed, toRaw } from "vue";
+import { PropType, computed, toRaw, ref } from "vue";
+
+import TilePostActionButton from "@/components/TilePostActionButton.vue";
+import InputPost from "@/components/InputPost.vue";
+
 import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
+
 import { refreshTimeline } from "@/store";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
 });
 const settings = useSettings();
+const expandedInput = ref(false);
 
 const getTextElements = (text: string, entities: Entity[]) => {
   const arr: Array<
@@ -56,6 +62,15 @@ const replyTo = computed(() => {
     ? { name: user.displayName || user.handle, avatar: user.avatar }
     : null;
 });
+const replyTarget = computed(() => {
+  const parent = {
+    cid: props.feed.post.cid,
+    uri: props.feed.post.uri,
+  };
+  const root = props.feed.reply?.root || parent;
+
+  return { parent, root };
+});
 </script>
 
 <template>
@@ -93,7 +108,7 @@ const replyTo = computed(() => {
         </div>
         <div class="tile-subtitle">
           <small v-if="replyTo" class="d-block mb-1">
-            &gt; Replay to <span class="text-primary">{{ replyTo.name }}</span>
+            &gt; Replied to <span class="text-primary">{{ replyTo.name }}</span>
           </small>
           <div class="pre-line wrap-anywhere">
             <template
@@ -106,41 +121,51 @@ const replyTo = computed(() => {
             </template>
           </div>
         </div>
-        <div>
-          <div class="d-inline-block mr-2">
-            <button class="btn btn-link" disabled>
-              <i class="bi bi-reply" aria-label="reply"></i>
-            </button>
+        <div class="mt-2">
+          <TilePostActionButton
+            aria-label="reply"
+            icon-class="bi bi-reply"
+            @click="expandedInput = true"
+          >
             {{ post.replyCount }}
-          </div>
-          <div class="d-inline-block mr-2">
-            <button
-              class="btn btn-link"
-              @click="
-                repost({
-                  cid: post.cid,
-                  uri: post.uri,
-                }).then(refreshTimeline)
-              "
-            >
-              <i class="bi bi-repeat" aria-label="repost"></i>
-            </button>
+          </TilePostActionButton>
+          <TilePostActionButton
+            aria-label="repost"
+            icon-class="bi bi-repeat"
+            @click="
+              repost({
+                cid: post.cid,
+                uri: post.uri,
+              }).then(refreshTimeline)
+            "
+          >
             {{ post.repostCount }}
-          </div>
-          <div class="d-inline-block">
-            <button
-              class="btn btn-link"
-              @click="
-                upvotePost({
-                  cid: post.cid,
-                  uri: post.uri,
-                }).then(refreshTimeline)
-              "
-            >
-              <i class="bi bi-heart" aria-label="like"></i>
-            </button>
-            {{ post.upvoteCount }}
-          </div>
+          </TilePostActionButton>
+          <TilePostActionButton
+            aria-label="like"
+            icon-class="bi bi-heart"
+            @click="
+              upvotePost({
+                cid: post.cid,
+                uri: post.uri,
+              }).then(refreshTimeline)
+            "
+          >
+            {{ post.repostCount }}
+          </TilePostActionButton>
+        </div>
+        <div v-if="expandedInput" class="d-flex">
+          <InputPost
+            class="column"
+            :replay="replyTarget"
+            @success="expandedInput = false"
+          />
+          <button
+            class="btn btn-link btn-icon col-auto col-ml-auto mt-1"
+            @click="expandedInput = false"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
         </div>
       </div>
       <div v-if="settings.enabledDeveloperMode">
@@ -169,9 +194,5 @@ const replyTo = computed(() => {
   .width-user-name {
     max-width: 150px;
   }
-}
-
-.btn-link {
-  padding: 0;
 }
 </style>

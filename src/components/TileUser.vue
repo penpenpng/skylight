@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, PropType, toRaw } from "vue";
+import { AtUri } from "@atproto/uri";
 
 import Avatar from "@/components/Avatar.vue";
 
@@ -15,10 +16,12 @@ const props = defineProps({
 
 const settings = useSettings();
 const updatedFollowing = ref(false);
+const followingUri = ref(props.user.viewer?.following);
 
 const follow = async () => {
   try {
-    await followUser({ did: props.user.did, cid: props.user.declaration.cid });
+    const { uri } = await followUser({ did: props.user.did, cid: props.user.declaration.cid });
+    followingUri.value = uri;
     updatedFollowing.value = !updatedFollowing.value;
   } catch {
     // Should display error
@@ -27,11 +30,14 @@ const follow = async () => {
 
 const unfollow = async () => {
   try {
-    await unfollowUser({
-      did: props.user.did,
-      rkey: "", // TODO: ???
-    });
-    updatedFollowing.value = !updatedFollowing.value;
+    if (followingUri.value) {
+      const atUri = new AtUri(followingUri.value);
+      await unfollowUser({
+        did: atUri.hostname,
+        rkey: atUri.rkey,
+      });
+      updatedFollowing.value = !updatedFollowing.value;
+    }
   } catch {
     // Should display error
   }
@@ -74,9 +80,7 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
       >
         + Follow
       </button>
-      <button v-else class="btn" @click="unfollow">
-        Unfollow (Not Implemented. Sorry!)
-      </button>
+      <button v-else class="btn" @click="unfollow">Unfollow</button>
       <button
         v-if="settings.enabledDeveloperMode"
         class="btn ml-2"

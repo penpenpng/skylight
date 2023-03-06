@@ -77,11 +77,30 @@ export const getTimeline = async (params: {
   return data;
 };
 
-export const postText = async (text: string) =>
-  agent.api.app.bsky.feed.post.create(
+export const postText = async (params: {
+  text: string;
+  urls?: { url: string; indices: [number, number] }[];
+  reply?: ReplyRef;
+}) => {
+  const { text, reply, urls = [] } = params;
+
+  return agent.api.app.bsky.feed.post.create(
     { did: self?.did },
-    { text, createdAt: getCreatedAt() }
+    {
+      text,
+      entities: urls.map(({ url, indices }) => ({
+        type: "link",
+        index: {
+          start: indices[0],
+          end: indices[1],
+        },
+        value: url,
+      })),
+      reply,
+      createdAt: getCreatedAt(),
+    }
   );
+};
 
 export const searchUsers = async (params: { term: string }) => {
   const { success, data } = await agent.api.app.bsky.actor.search(params);
@@ -226,3 +245,15 @@ export type Entity = {
 };
 
 export type User = AtpResponse<typeof searchUsers>[number];
+
+export interface ReplyRef {
+  root: {
+    cid: string;
+    uri: string;
+  };
+  parent: {
+    cid: string;
+    uri: string;
+  };
+  [k: string]: unknown;
+}

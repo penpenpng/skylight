@@ -41,14 +41,25 @@ const tabs = [
     </button>
   </div>
 
-  <ul v-if="route.name !== 'login'" class="tab">
-    <li
-      v-for="({ routeName, label }, idx) in tabs"
-      :key="idx"
-      class="tab-item"
-      :class="{ active: route.name === routeName }"
-    >
-      <RouterLink :to="{ name: routeName }">{{ label }}</RouterLink>
-    </li>
-  </ul>
+  <div class="sticky-area">
+    <ul v-if="route.name !== 'login'" class="tab">
+      <li
+        v-for="({ routeName, label }, idx) in tabs"
+        :key="idx"
+        class="tab-item"
+        :class="{ active: route.name === routeName }"
+      >
+        <RouterLink :to="{ name: routeName }">{{ label }}</RouterLink>
+      </li>
+    </ul>
+  </div>
 </template>
+
+<style scoped>
+.sticky-area {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+</style>
