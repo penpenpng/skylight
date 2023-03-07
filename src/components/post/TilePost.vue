@@ -21,6 +21,7 @@ const getTextElements = (text: string, entities: Entity[]) => {
   const arr: Array<
     | { type: "text"; text: string }
     | { type: "link"; text: string; href: string }
+    | { type: "mention"; text: string; href: string }
   > = [];
   const ent = [...entities].sort((a, b) => a.index.start - b.index.start);
   let idx = 0;
@@ -31,7 +32,7 @@ const getTextElements = (text: string, entities: Entity[]) => {
       text: text.slice(idx, e.index.start),
     });
     arr.push({
-      type: "link",
+      type: e.type,
       text: text.slice(e.index.start, e.index.end),
       href: e.value,
     });
@@ -103,6 +104,10 @@ const replyTarget = computed(() => {
                 post.record.entities || []
               )"
               ><span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span
+              ><RouterLink
+                v-else-if="e.type === 'mention'"
+                :to="{ name: 'profile', params: { actor: e.href } }"
+                >{{ e.text }}</RouterLink
               ><a v-else :href="e.href" target="_blank">{{ e.text }}</a>
             </template>
           </div>
