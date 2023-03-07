@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, reactive } from "vue";
 
-import ButtonAsync from "@/components/ButtonAsync.vue";
+import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import ModalChangeHandle from "@/components/ModalChangeHandle.vue";
 import { useSettings, updateSettings } from "@/lib/settings";
 

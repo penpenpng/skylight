@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 import { searchUsers, ActorDetail } from "@/lib/atp";
-import TileUser from "@/components/TileUser.vue";
+import TileUser from "@/components/profile/TileUser.vue";
 
 const state = reactive({
   query: "",

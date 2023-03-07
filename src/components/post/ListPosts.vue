@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TilePost from "@/components/TilePost.vue";
+import TilePost from "@/components/post/TilePost.vue";
 import { getMyFeed } from "@/lib/atp";
 
 const [feeds] = await getMyFeed();

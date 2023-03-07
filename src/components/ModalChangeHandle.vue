@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import ButtonAsync from "@/components/ButtonAsync.vue";
+import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import { getMyProfile, tryResumeSession, updateHandle } from "@/lib/atp";
 import { ref } from "vue";
 

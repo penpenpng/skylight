@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TheHeader from "@/components/TheHeader.vue";
-import Loadable from "./components/Loadable.vue";
+import Loadable from "./components/common/Loadable.vue";
 </script>
 
 <template>

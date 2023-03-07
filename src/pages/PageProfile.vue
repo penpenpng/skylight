@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { reactive, toRaw } from "vue";
 
-import Avatar from "@/components/Avatar.vue";
-import Loadable from "@/components/Loadable.vue";
-import ListUsers from "@/components/ListUsers.vue";
-import ListPosts from "@/components/ListPosts.vue";
+import Avatar from "@/components/common/Avatar.vue";
+import Loadable from "@/components/common/Loadable.vue";
+import ListUsers from "@/components/profile/ListUsers.vue";
+import ListPosts from "@/components/post/ListPosts.vue";
 
 import { useSettings } from "@/lib/settings";
 import { getMyProfile } from "@/lib/atp";

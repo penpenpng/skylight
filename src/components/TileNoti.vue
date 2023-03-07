@@ -2,7 +2,7 @@
 import { PropType } from "vue";
 import { Notification } from "@/lib/atp";
 import { useState } from "@/store";
-import Avatar from "./Avatar.vue";
+import Avatar from "./common/Avatar.vue";
 
 defineProps({
   noti: {

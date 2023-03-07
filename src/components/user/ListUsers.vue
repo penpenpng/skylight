@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TileUser from "@/components/TileUser.vue";
+import TileUser from "@/components/user/TileUser.vue";
 import { getMyFollowers, getMyFollows } from "@/lib/atp";
 import { PropType } from "vue";
 

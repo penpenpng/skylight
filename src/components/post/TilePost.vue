@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { PropType, computed, toRaw, ref } from "vue";
 
-import TilePostActionButton from "@/components/TilePostActionButton.vue";
-import InputPost from "@/components/InputPost.vue";
+import TilePostActionButton from "@/components/post/TilePostActionButton.vue";
+import InputPost from "@/components/post/InputPost.vue";
 
 import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";

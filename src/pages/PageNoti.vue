@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import ButtonAsync from "@/components/ButtonAsync.vue";
+import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import ListNoti from "@/components/ListNoti.vue";
-import Loadable from "@/components/Loadable.vue";
+import Loadable from "@/components/common/Loadable.vue";
 
 import { refreshNotification } from "@/store";
 </script>

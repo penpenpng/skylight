@@ -2,7 +2,7 @@
 import { ref, PropType, toRaw } from "vue";
 import { AtUri } from "@atproto/uri";
 
-import Avatar from "@/components/Avatar.vue";
+import Avatar from "@/components/common/Avatar.vue";
 
 import { Actor, ActorDetail, followUser, unfollowUser } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
