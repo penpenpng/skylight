@@ -151,7 +151,7 @@ const replyTarget = computed(() => {
               }).then(refreshTimeline)
             "
           >
-            {{ post.repostCount }}
+            {{ post.upvoteCount }}
           </TilePostActionButton>
         </div>
         <div v-if="expandedInput" class="d-flex">

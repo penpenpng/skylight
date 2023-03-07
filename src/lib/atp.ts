@@ -195,7 +195,7 @@ export const getMyFollowers = async (): CursoredResponse<{
   }
 
   return [
-    { subject: data.subject as Actor, users: data.follows as Actor[] },
+    { subject: data.subject as Actor, users: data.followers as Actor[] },
     data.cursor,
   ];
 };
