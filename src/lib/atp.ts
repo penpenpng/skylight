@@ -263,6 +263,9 @@ export const getPostThread = async (params: {
   return data.thread as unknown as PostThread;
 };
 
+export const updateHandle = async (params: { handle: string }) =>
+  agent.api.com.atproto.handle.update({ handle: params.handle });
+
 export interface Feed {
   post: Post;
   reply?: {
