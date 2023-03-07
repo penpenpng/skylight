@@ -1,13 +1,15 @@
 <script setup lang="ts">
+import { ref, reactive } from "vue";
+
+import ButtonAsync from "@/components/ButtonAsync.vue";
 import ModalChangeHandle from "@/components/ModalChangeHandle.vue";
 import { useSettings, updateSettings } from "@/lib/settings";
-import { ref } from "vue";
 
 const settings = useSettings();
-const activeModalChangeHandle = ref(false);
-const toggleModalChangeHandle = () => {
-  activeModalChangeHandle.value = !activeModalChangeHandle.value;
-};
+const state = reactive({
+  showsModalChangeHandle: false,
+  loadingModalChangeHandle: false,
+});
 </script>
 
 <template>
@@ -26,11 +28,22 @@ const toggleModalChangeHandle = () => {
     </label>
   </div>
   <div>
-    <button class="btn" @click="toggleModalChangeHandle">
+    <ButtonAsync
+      class="btn"
+      @click="state.showsModalChangeHandle = true"
+      :force-loading="state.loadingModalChangeHandle"
+    >
       Change my handle...
-    </button>
+    </ButtonAsync>
   </div>
-  <div v-if="activeModalChangeHandle">
-    <ModalChangeHandle @close="toggleModalChangeHandle" />
-  </div>
+  <Suspense
+    @pending="state.loadingModalChangeHandle = true"
+    @resolve="state.loadingModalChangeHandle = false"
+    @fallback="state.loadingModalChangeHandle = false"
+  >
+    <ModalChangeHandle
+      v-if="state.showsModalChangeHandle"
+      @close="state.showsModalChangeHandle = false"
+    />
+  </Suspense>
 </template>
