@@ -1,8 +1,14 @@
 <script setup lang="ts">
 import TilePost from "@/components/post/TilePost.vue";
-import { getMyFeed } from "@/lib/atp";
+import { getFeed } from "@/lib/atp";
 
-const [feeds] = await getMyFeed();
+const props = defineProps({
+  actor: {
+    type: String,
+  },
+});
+
+const [feeds] = await getFeed({ actor: props.actor });
 </script>
 
 <template>

@@ -1,27 +1,45 @@
 <script setup lang="ts">
 import TheHeader from "@/components/TheHeader.vue";
+import { useRoute } from "vue-router";
 import Loadable from "./components/common/Loadable.vue";
+
+const route = useRoute();
 </script>
 
 <template>
-  <main class="m-2 p-2">
+  <main>
     <TheHeader />
 
     <div class="main-view">
       <Loadable>
-        <RouterView />
+        <RouterView :key="route.path" />
       </Loadable>
     </div>
   </main>
 </template>
 
 <style scoped>
+main {
+  max-width: 800px;
+  margin: auto;
+}
+
 .main-view {
   z-index: 1;
 }
 </style>
 
 <style>
+body,
+#app {
+  width: 100%;
+  margin: 0;
+}
+
+#app {
+  padding: 10px;
+}
+
 .btn-link.btn-icon {
   padding: 0;
   height: 1.1rem;

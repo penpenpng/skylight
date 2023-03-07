@@ -23,7 +23,7 @@ const tabs = [
     label: "Search",
   },
   {
-    routeName: "profile",
+    routeName: "my-profile",
     label: "Profile",
   },
   {

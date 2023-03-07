@@ -2,7 +2,8 @@
 import { PropType } from "vue";
 import { Notification } from "@/lib/atp";
 import { useState } from "@/store";
-import Avatar from "./common/Avatar.vue";
+import Avatar from "@/components/common/Avatar.vue";
+import Username from "@/components/common/Username.vue";
 
 defineProps({
   noti: {
@@ -31,10 +32,10 @@ const state = useState();
     </div>
     <div class="tile-content mt-1">
       <div class="tile-title">
-        <span class="text-primary text-bold ml-2">{{
-          noti.author.displayName || noti.author.handle
-        }}</span
-        ><span class="text-dark ml-1">liked:</span>
+        <Username class="ml-2" :user="noti.author" /><span
+          class="text-dark ml-1"
+          >liked:</span
+        >
       </div>
       <div class="tile-subtitle pre-line p-2 text-small text-muted">
         {{ state.posts[noti.record.subject.uri]?.record?.text }}
@@ -60,10 +61,10 @@ const state = useState();
     </div>
     <div class="tile-content mt-1">
       <div class="tile-title">
-        <span class="text-primary text-bold ml-2">{{
-          noti.author.displayName || noti.author.handle
-        }}</span
-        ><span class="text-dark ml-1">reposted:</span>
+        <Username class="ml-2" :user="noti.author" /><span
+          class="text-dark ml-1"
+          >reposted:</span
+        >
       </div>
       <div class="tile-subtitle pre-line p-2 text-small text-muted">
         {{ state.posts[noti.record.subject.uri]?.record?.text }}
@@ -83,10 +84,8 @@ const state = useState();
     </div>
     <div class="tile-content mt-1">
       <div class="tile-title">
-        <span class="text-primary text-bold ml-2">{{
-          noti.author.displayName || noti.author.handle
-        }}</span
-        ><span class="text-dark ml-1"
+        <Username class="ml-2" :user="noti.author" /><span
+          class="text-dark ml-1"
           >{{ noti.reason === "mention" ? "mentioned" : "replied" }}:</span
         >
       </div>

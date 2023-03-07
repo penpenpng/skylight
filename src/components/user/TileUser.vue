@@ -6,6 +6,7 @@ import Avatar from "@/components/common/Avatar.vue";
 
 import { Actor, ActorDetail, followUser, unfollowUser } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
+import Username from "../common/Username.vue";
 
 const props = defineProps({
   user: {
@@ -63,9 +64,7 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
     </div>
     <div class="tile-content">
       <div class="tile-title">
-        <span class="text-primary text-bold">
-          {{ user.displayName || user.handle }}
-        </span>
+        <Username :user="user" />
         <small class="text-dark ml-2">@{{ user.handle }}</small>
         <span v-if="!!user.viewer?.followedBy" class="chip ml-2"
           >Follows You</span

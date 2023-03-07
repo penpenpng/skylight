@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
-import { getMyProfile, tryResumeSession, updateHandle } from "@/lib/atp";
-import { ref } from "vue";
+import { getProfile, tryResumeSession, updateHandle } from "@/lib/atp";
+import { shallowRef, ref } from "vue";
 
 const emits = defineEmits<{
   (ev: "close"): void;
 }>();
 
 const serviceDomain = "bsky.social";
-const user = ref(await getMyProfile());
+const user = shallowRef(await getProfile());
 const handleText = ref(user.value.handle);
 const handleError = ref("");
 

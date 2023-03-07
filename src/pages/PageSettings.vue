@@ -33,7 +33,7 @@ const state = reactive({
       @click="state.showsModalChangeHandle = true"
       :force-loading="state.loadingModalChangeHandle"
     >
-      Change my handle...
+      Edit your handle...
     </ButtonAsync>
   </div>
   <Suspense

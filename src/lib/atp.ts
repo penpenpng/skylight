@@ -67,7 +67,6 @@ export const getTimeline = async (params: {
   cursor?: string;
 }): CursoredResponse<Feed[]> => {
   const { success, data } = await agent.api.app.bsky.feed.getTimeline(params);
-
   if (!success) {
     throw new Error("getTimeline failed");
   }
@@ -77,7 +76,6 @@ export const getTimeline = async (params: {
 
 export const getNotifications = async (): CursoredResponse<Notification[]> => {
   const { success, data } = await agent.api.app.bsky.notification.list();
-
   if (!success) {
     throw new Error("getTimeline failed");
   }
@@ -114,7 +112,6 @@ export const searchUsers = async (params: {
   term: string;
 }): CursoredResponse<ActorDetail[]> => {
   const { success, data } = await agent.api.app.bsky.actor.search(params);
-
   if (!success) {
     throw new Error("searchUsers failed");
   }
@@ -134,40 +131,43 @@ export const followUser = async (params: { did: string; cid: string }) =>
 export const unfollowUser = async (params: { did: string; rkey: string }) =>
   agent.api.app.bsky.graph.follow.delete(params);
 
-export const getMyProfile = async (): Promise<ActorProfile> => {
-  const handle = self?.handle;
-
-  if (!handle) {
-    throw new Error("No session");
+export const getProfile = async (params?: {
+  // If omitted, get login user profile
+  actor?: string;
+}): Promise<ActorProfile> => {
+  const actor = params?.actor || self?.handle;
+  if (!actor) {
+    throw new Error();
   }
 
   const { success, data } = await agent.api.app.bsky.actor.getProfile({
-    actor: handle,
+    actor,
   });
 
   if (!success) {
-    throw new Error("getMyProfile failed");
+    throw new Error("getProfile failed");
   }
 
   return data as ActorProfile;
 };
 
-export const getMyFollows = async (): CursoredResponse<{
+export const getFollows = async (params?: {
+  // If omitted, get login user profile
+  actor?: string;
+}): CursoredResponse<{
   subject: Actor;
   users: Actor[];
 }> => {
-  const handle = self?.handle;
-
-  if (!handle) {
-    throw new Error("No session");
+  const user = params?.actor || self?.handle;
+  if (!user) {
+    throw new Error();
   }
 
   const { success, data } = await agent.api.app.bsky.graph.getFollows({
-    user: handle,
+    user,
   });
-
   if (!success) {
-    throw new Error("getMyFollows failed");
+    throw new Error("getFollows failed");
   }
 
   return [
@@ -176,22 +176,22 @@ export const getMyFollows = async (): CursoredResponse<{
   ];
 };
 
-export const getMyFollowers = async (): CursoredResponse<{
+export const getFollowers = async (params?: {
+  // If omitted, get login user profile
+  actor?: string;
+}): CursoredResponse<{
   subject: Actor;
   users: Actor[];
 }> => {
-  const handle = self?.handle;
-
-  if (!handle) {
-    throw new Error("No session");
+  const user = params?.actor || self?.handle;
+  if (!user) {
+    throw new Error();
   }
-
   const { success, data } = await agent.api.app.bsky.graph.getFollowers({
-    user: handle,
+    user,
   });
-
   if (!success) {
-    throw new Error("getMyFollowers failed");
+    throw new Error("getFollowers failed");
   }
 
   return [
@@ -200,19 +200,19 @@ export const getMyFollowers = async (): CursoredResponse<{
   ];
 };
 
-export const getMyFeed = async (): CursoredResponse<Feed[]> => {
-  const handle = self?.handle;
-
-  if (!handle) {
-    throw new Error("No session");
+export const getFeed = async (params?: {
+  actor?: string;
+}): CursoredResponse<Feed[]> => {
+  const author = params?.actor || self?.handle;
+  if (!author) {
+    throw new Error();
   }
 
   const { success, data } = await agent.api.app.bsky.feed.getAuthorFeed({
-    author: handle,
+    author,
   });
-
   if (!success) {
-    throw new Error("getMyFollowers failed");
+    throw new Error("getFeed failed");
   }
 
   return [data.feed as unknown as Feed[], data.cursor];
@@ -255,7 +255,6 @@ export const getPostThread = async (params: {
   depth?: number;
 }): Promise<PostThread> => {
   const { success, data } = await agent.api.app.bsky.feed.getPostThread(params);
-
   if (!success) {
     throw new Error("getPostThread failed");
   }
