@@ -2,12 +2,11 @@
 import { reactive, watch, toRaw, PropType } from "vue";
 import twtext from "twitter-text";
 
-import ButtonAsync from "@/components/ButtonAsync.vue";
+import ButtonAsync from "@/components/common/ButtonAsync.vue";
 
 import { postText, ReplyRef } from "@/lib/atp";
 import { smartMerge, debounce } from "@/lib/algorithm";
 import { refreshTimeline } from "@/store";
-import { findDir } from "@vue/compiler-core";
 
 const emits = defineEmits<{
   (ev: "success"): void;

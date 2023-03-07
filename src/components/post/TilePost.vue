@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { PropType, computed, toRaw, ref } from "vue";
 
-import TilePostActionButton from "@/components/TilePostActionButton.vue";
-import InputPost from "@/components/InputPost.vue";
+import TilePostActionButton from "@/components/post/TilePostActionButton.vue";
+import InputPost from "@/components/post/InputPost.vue";
 
 import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
 
 import { refreshTimeline } from "@/store";
+import Avatar from "../common/Avatar.vue";
+import Username from "../common/Username.vue";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
@@ -48,20 +50,8 @@ const printFeedObject = () => {
 };
 
 const post = computed(() => props.feed.post);
-const repostedBy = computed(() => {
-  const user = props.feed.reason?.by as any;
-
-  return user
-    ? { name: user.displayName || user.handle, avatar: user.avatar }
-    : null;
-});
-const replyTo = computed(() => {
-  const user = props.feed.reply?.parent.author;
-
-  return user
-    ? { name: user.displayName || user.handle, avatar: user.avatar }
-    : null;
-});
+const repostedBy = computed(() => props.feed.reason?.by);
+const replyTo = computed(() => props.feed.reply?.parent.author);
 const replyTarget = computed(() => {
   const parent = {
     cid: props.feed.post.cid,
@@ -81,34 +71,30 @@ const replyTarget = computed(() => {
         class="width-repost-chip text-ellipsis d-inline-block"
         style="max-width: 200px"
         >Reposted by
-        <span class="text-primary">{{ repostedBy.name }}</span></span
-      >
+        <Username :user="repostedBy" font-weight-normal />
+      </span>
     </span>
     <article class="tile" :class="{ 'pl-2': repostedBy }">
       <div class="tile-icon">
-        <figure v-if="post.author.avatar" class="avatar avatar-lg">
-          <img :src="post.author.avatar" alt="" />
-        </figure>
-        <figure
-          v-else
-          class="avatar avatar-lg"
-          :data-initial="(post.author.displayName || post.author.handle)[0]"
-        ></figure>
+        <Avatar
+          :src="post.author.avatar"
+          :handle="post.author.handle"
+          :display-name="post.author.displayName"
+        />
       </div>
       <div class="tile-content">
         <div class="tile-title d-inline-flex">
-          <span
-            class="width-user-name text-primary text-bold text-ellipsis d-inline-block"
-          >
-            {{ post.author.displayName || post.author.handle }}
-          </span>
+          <Username
+            :user="post.author"
+            class="width-user-name text-ellipsis d-inline-block"
+          />
           <small class="text-gray ml-2">
             {{ new Date(post.indexedAt).toLocaleTimeString() }}
           </small>
         </div>
         <div class="tile-subtitle">
           <small v-if="replyTo" class="d-block mb-1">
-            &gt; Replied to <span class="text-primary">{{ replyTo.name }}</span>
+            &gt; Replied to <Username :user="replyTo" font-weight-normal />
           </small>
           <div class="pre-line wrap-anywhere">
             <template

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TilePost from "@/components/TilePost.vue";
+import TilePost from "@/components/post/TilePost.vue";
 import { useState, refreshTimeline } from "@/store";
 
 const state = useState();

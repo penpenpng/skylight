@@ -45,9 +45,16 @@ export const router = createRouter({
       beforeEnter: assumeLogin,
     },
     {
-      name: "profile",
+      name: "my-profile",
       path: "/profile",
       component: PageProfile,
+      beforeEnter: assumeLogin,
+    },
+    {
+      name: "profile",
+      path: "/profile/:actor",
+      component: PageProfile,
+      props: true,
       beforeEnter: assumeLogin,
     },
     {
