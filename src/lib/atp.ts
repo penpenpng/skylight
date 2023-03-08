@@ -16,6 +16,9 @@ type CursoredResponse<T> = Promise<[data: T, cursor?: string]>;
 
 const getCreatedAt = () => new Date().toISOString();
 
+export const isMe = (actor: string) =>
+  actor === self?.did || actor === self?.handle;
+
 export const tryResumeSession = async () => {
   const session = (() => {
     const sessStr = localStorage.getItem(SES_LOCAL_STORAGE_KEY);

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useNotifications } from "@/lib/query";
-import TileNoti from "./notifications/TileNoti.vue";
+import TileNoti from "./TileNoti.vue";
 
 const { data: notifications, suspense } = useNotifications();
 await suspense();

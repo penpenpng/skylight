@@ -3,12 +3,14 @@ import { PropType, computed, toRaw, ref } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
+import Dropdown from "@/components/common/Dropdown.vue";
 import TilePostActionButton from "@/components/post/TilePostActionButton.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
 import { Entity, Feed } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
 import { useRepostMutation, useUpvoteMutation } from "@/lib/query";
+import { useObjectInspector } from "@/lib/composable";
 
 const { mutate: repost } = useRepostMutation();
 const { mutate: upvote } = useUpvoteMutation();
@@ -48,9 +50,7 @@ const getTextElements = (text: string, entities: Entity[]) => {
 
   return arr;
 };
-const printFeedObject = () => {
-  console.log(toRaw(props.feed));
-};
+const { printObject, copyObject } = useObjectInspector(props.feed);
 
 const post = computed(() => props.feed.post);
 const repostedBy = computed(() => props.feed.reason?.by);
@@ -162,7 +162,15 @@ const replyTarget = computed(() => {
         </div>
       </div>
       <div v-if="settings.enabledDeveloperMode">
-        <button class="btn" @click="printFeedObject">Print Object</button>
+        <Dropdown
+          :keys="['print-object', 'copy-object']"
+          right
+          @print-object="printObject"
+          @copy-object="copyObject"
+        >
+          <template #print-object>Print Object</template>
+          <template #copy-object>Copy Object</template>
+        </Dropdown>
       </div>
     </article>
   </div>

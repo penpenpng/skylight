@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { ref, PropType, toRaw } from "vue";
-import { AtUri } from "@atproto/uri";
+import { PropType } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
+import Dropdown from "@/components/common/Dropdown.vue";
+import ButtonFollow from "@/components/user/ButtonFollow.vue";
 
-import { Actor, ActorDetail, followUser } from "@/lib/atp";
+import { Actor, ActorDetail } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
-import { useUnfollowMutation } from "@/lib/query";
+import { useObjectInspector } from "@/lib/composable";
 
 const props = defineProps({
   user: {
@@ -17,44 +18,7 @@ const props = defineProps({
 });
 
 const settings = useSettings();
-// Cannot useMutation return value?
-// const { mutate: followUser } = useFollowMutation();
-const { mutate: unfollowUser } = useUnfollowMutation();
-const updatedFollowing = ref(false);
-const followingUri = ref(props.user.viewer?.following);
-
-const follow = async () => {
-  try {
-    const { uri } = await followUser({
-      did: props.user.did,
-      cid: props.user.declaration.cid,
-    });
-    followingUri.value = uri;
-    updatedFollowing.value = !updatedFollowing.value;
-  } catch {
-    // Should display error
-  }
-};
-
-const unfollow = async () => {
-  try {
-    if (followingUri.value) {
-      const atUri = new AtUri(followingUri.value);
-      await unfollowUser({
-        did: atUri.hostname,
-        rkey: atUri.rkey,
-      });
-      updatedFollowing.value = !updatedFollowing.value;
-    }
-  } catch {
-    // Should display error
-  }
-};
-const printUserObject = () => {
-  console.log(toRaw(props.user));
-};
-
-const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
+const { printObject, copyObject } = useObjectInspector(props.user);
 </script>
 
 <template>
@@ -69,31 +33,24 @@ const xor = (a: boolean, b: boolean) => (a || b) && !(a && b);
     <div class="tile-content">
       <div class="tile-title">
         <Username :user="user" />
-        <small class="text-dark ml-2">@{{ user.handle }}</small>
-        <span v-if="!!user.viewer?.followedBy" class="chip ml-2"
-          >Follows You</span
-        >
       </div>
       <div class="tile-subtitle">
-        {{ (user as ActorDetail).description || "" }}
+        <small class="text-dark">@{{ user.handle }}</small>
       </div>
+      <span v-if="!!user.viewer?.followedBy" class="chip">Follows You</span>
     </div>
     <div class="tile-action mx-2">
-      <button
-        v-if="xor(!user.viewer?.following, updatedFollowing)"
-        class="btn btn-primary"
-        @click="follow"
-      >
-        + Follow
-      </button>
-      <button v-else class="btn" @click="unfollow">Unfollow</button>
-      <button
+      <ButtonFollow :user="user" class="mr-2" />
+      <Dropdown
         v-if="settings.enabledDeveloperMode"
-        class="btn ml-2"
-        @click="printUserObject"
+        :keys="['print-object', 'copy-object']"
+        right
+        @print-object="printObject"
+        @copy-object="copyObject"
       >
-        Print Object
-      </button>
+        <template #print-object>Print Object</template>
+        <template #copy-object>Copy Object</template>
+      </Dropdown>
     </div>
   </article>
 </template>

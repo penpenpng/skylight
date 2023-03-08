@@ -7,7 +7,7 @@ import PageSearchUser from "@/pages/PageSearchUser.vue";
 import PageProfile from "@/pages/PageProfile.vue";
 import PageSettings from "@/pages/PageSettings.vue";
 
-import { tryResumeSession } from "@/lib/atp";
+import { isMe, tryResumeSession } from "@/lib/atp";
 
 const assumeLogin: RouteRecordRaw["beforeEnter"] = async (to, from, next) => {
   const { success } = await tryResumeSession();
@@ -55,7 +55,16 @@ export const router = createRouter({
       path: "/profile/:actor",
       component: PageProfile,
       props: true,
-      beforeEnter: assumeLogin,
+      beforeEnter: async (to, from, next) => {
+        const { success } = await tryResumeSession();
+        if (!success) {
+          next({ name: "login" });
+        } else if (isMe(to.params.actor as string)) {
+          next({ name: "my-profile" });
+        } else {
+          next();
+        }
+      },
     },
     {
       name: "settings",

@@ -1,3 +1,4 @@
+import { ref } from "vue";
 import { QueryClient, useMutation, useQuery } from "vue-query";
 
 import {
@@ -29,12 +30,8 @@ const Keys = {
 const client = new QueryClient();
 
 export const useHomeTimeline = () => {
-  const query = useQuery(
-    Keys.homeTimeline(),
-    () => getTimeline({ limit: 100 }),
-    {
-      suspense: true,
-    }
+  const query = useQuery(Keys.homeTimeline(), () =>
+    getTimeline({ limit: 100 })
   );
 
   return {
@@ -44,12 +41,8 @@ export const useHomeTimeline = () => {
 };
 
 export const useAuthorFeed = (actor?: string) => {
-  const query = useQuery(
-    Keys.authorFeed(actor),
-    () => getAuthorFeed({ actor }),
-    {
-      suspense: true,
-    }
+  const query = useQuery(Keys.authorFeed(actor), () =>
+    getAuthorFeed({ actor })
   );
 
   return {
@@ -59,15 +52,11 @@ export const useAuthorFeed = (actor?: string) => {
 };
 
 export const useActorProfile = (actor?: string) => {
-  return useQuery(Keys.actorProfile(actor), () => getProfile({ actor }), {
-    suspense: true,
-  });
+  return useQuery(Keys.actorProfile(actor), () => getProfile({ actor }));
 };
 
 export const useFollows = (actor?: string) => {
-  const query = useQuery(Keys.follows(actor), () => getFollows({ actor }), {
-    suspense: true,
-  });
+  const query = useQuery(Keys.follows(actor), () => getFollows({ actor }));
 
   return {
     ...query,
@@ -76,9 +65,7 @@ export const useFollows = (actor?: string) => {
 };
 
 export const useFollowers = (actor?: string) => {
-  const query = useQuery(Keys.followers(actor), () => getFollowers({ actor }), {
-    suspense: true,
-  });
+  const query = useQuery(Keys.followers(actor), () => getFollowers({ actor }));
 
   return {
     ...query,
@@ -87,9 +74,7 @@ export const useFollowers = (actor?: string) => {
 };
 
 export const useNotifications = () => {
-  const query = useQuery(Keys.notifications(), () => getNotifications(), {
-    suspense: true,
-  });
+  const query = useQuery(Keys.notifications(), () => getNotifications());
 
   return {
     ...query,
@@ -98,16 +83,14 @@ export const useNotifications = () => {
 };
 
 export const usePost = (uri: string) => {
-  return useQuery(Keys.post(uri), () => getPost({ uri }), { suspense: true });
+  return useQuery(Keys.post(uri), () => getPost({ uri }));
 };
 
-export const fetchHomeTimeline = () => {
+export const fetchHomeTimeline = () =>
   client.setQueryData(Keys.homeTimeline(), () => getTimeline({ limit: 100 }));
-};
 
-export const fetchNotifications = () => {
+export const fetchNotifications = () =>
   client.setQueryData(Keys.notifications(), () => getNotifications());
-};
 
 export const usePostMutation = () => {
   return useMutation(postText, {

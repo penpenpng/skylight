@@ -1,17 +1,20 @@
 <script setup lang="ts">
-import { reactive, toRaw, Ref } from "vue";
+import { reactive, Ref } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Loadable from "@/components/common/Loadable.vue";
+import Dropdown from "@/components/common/Dropdown.vue";
 import ListUsers from "@/components/user/ListUsers.vue";
 import ProfileTab from "@/components/user/ProfileTab.vue";
+import ButtonFollow from "@/components/user/ButtonFollow.vue";
 import ListPosts from "@/components/post/ListPosts.vue";
 
 import { useSettings } from "@/lib/settings";
-
-import defaultHero from "@/assets/default-hero.jpg?url";
 import { useActorProfile } from "@/lib/query";
 import { ActorProfile } from "@/lib/atp";
+import { useObjectInspector } from "@/lib/composable";
+
+import defaultHero from "@/assets/default-hero.jpg?url";
 
 const props = defineProps({
   actor: {
@@ -32,10 +35,7 @@ const state = reactive<State>({
 });
 
 const settings = useSettings();
-
-const printUserObject = () => {
-  console.log(toRaw(user));
-};
+const { printObject, copyObject } = useObjectInspector(user);
 </script>
 
 <template>
@@ -63,11 +63,22 @@ const printUserObject = () => {
           <h5 class="mb-1">{{ user.displayName || user.handle }}</h5>
           <small class="text-dark d-block">@{{ user.handle }}</small>
         </div>
+        <div v-if="actor" class="column col-auto">
+          <ButtonFollow :user="user" />
+        </div>
+        <div v-if="settings.enabledDeveloperMode" class="column col-auto">
+          <Dropdown
+            :keys="['print-object', 'copy-object']"
+            right
+            @print-object="printObject"
+            @copy-object="copyObject"
+          >
+            <template #print-object>Print Object</template>
+            <template #copy-object>Copy Object</template>
+          </Dropdown>
+        </div>
       </div>
       <div class="card-body pre-line">{{ user.description }}</div>
-      <div v-if="settings.enabledDeveloperMode" class="card-footer">
-        <button class="btn" @click="printUserObject">Print Object</button>
-      </div>
     </div>
   </div>
 

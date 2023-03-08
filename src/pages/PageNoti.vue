@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
-import ListNoti from "@/components/ListNoti.vue";
+import ListNoti from "@/components/notifications/ListNoti.vue";
 import Loadable from "@/components/common/Loadable.vue";
 
 import { fetchNotifications } from "@/lib/query";
