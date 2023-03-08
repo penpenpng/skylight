@@ -4,9 +4,10 @@ import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import Timeline from "@/components/post/Timeline.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
-import { fetchHomeTimeline, useHomeTimeline } from "@/lib/query";
+import { useHomeTimelineFetch, useHomeTimeline } from "@/lib/query";
 
 const { isFetching } = useHomeTimeline();
+const refetch = useHomeTimelineFetch();
 </script>
 
 <template>
@@ -15,7 +16,7 @@ const { isFetching } = useHomeTimeline();
   <div class="columns col-oneline p-2">
     <ButtonAsync
       class="btn btn-secondary col-ml-auto"
-      :onClick="fetchHomeTimeline"
+      :onClick="refetch"
       :forceLoading="isFetching"
     >
       Refresh

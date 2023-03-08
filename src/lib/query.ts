@@ -82,33 +82,36 @@ export const usePost = (uri: string) => {
   return useQuery(Keys.post(uri), () => getPost({ uri }));
 };
 
-export const fetchHomeTimeline = async () => {
+export const useHomeTimelineFetch = () => {
   const client = useQueryClient();
-  client.fetchQuery(Keys.homeTimeline(), () => getTimeline({ limit: 100 }));
+  return () => client.refetchQueries(Keys.homeTimeline());
 };
 
-export const fetchNotifications = () => {
+export const useNotificationFetch = () => {
   const client = useQueryClient();
-  client.fetchQuery(Keys.notifications(), () => getNotifications());
+  return () => client.refetchQueries(Keys.notifications());
 };
 
 export const usePostMutation = () => {
+  const refetch = useHomeTimelineFetch();
   return useMutation(postText, {
-    onSuccess: fetchHomeTimeline,
+    onSuccess: refetch,
   });
 };
 
 // TODO: optimisitc mutation
 export const useRepostMutation = () => {
+  const refetch = useHomeTimelineFetch();
   return useMutation(repost, {
-    onSuccess: fetchHomeTimeline,
+    onSuccess: refetch,
   });
 };
 
 // TODO: optimisitc mutation
 export const useUpvoteMutation = () => {
+  const refetch = useHomeTimelineFetch();
   return useMutation(upvote, {
-    onSuccess: fetchHomeTimeline,
+    onSuccess: refetch,
   });
 };
 
