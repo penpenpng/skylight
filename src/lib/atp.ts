@@ -1,4 +1,6 @@
 import { AtpAgent, AtpSessionData } from "@atproto/api";
+import { AtUri } from "@atproto/uri";
+
 const SES_LOCAL_STORAGE_KEY = "sess";
 
 const agent = new AtpAgent({
@@ -66,7 +68,10 @@ export const getTimeline = async (params: {
   limit?: number;
   cursor?: string;
 }): CursoredResponse<Feed[]> => {
-  const { success, data } = await agent.api.app.bsky.feed.getTimeline(params);
+  const { success, data } = await agent.api.app.bsky.feed.getTimeline({
+    ...params,
+    algorithm: "reverse-chronological",
+  });
   if (!success) {
     throw new Error("getTimeline failed");
   }
@@ -264,6 +269,8 @@ export const getPostThread = async (params: {
 
 export const updateHandle = async (params: { handle: string }) =>
   agent.api.com.atproto.handle.update({ handle: params.handle });
+
+export const getDidByUri = (uri: string): string => new AtUri(uri).hostname;
 
 export interface Feed {
   post: Post;
