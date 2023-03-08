@@ -91,7 +91,7 @@ const { printObject, copyObject } = useObjectInspector(user);
     <ListUsers kind="followers" :actor="actor" />
   </Loadable>
   <Loadable v-else-if="state.tab === 'posts'">
-    <ListPosts :actor="actor" />
+    <ListPosts kind="author-feed" :actor="actor" />
   </Loadable>
 </template>
 

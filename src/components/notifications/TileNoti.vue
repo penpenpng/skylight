@@ -4,8 +4,8 @@ import { Notification } from "@/lib/atp";
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
 
-import TileNotiVote from "./TileNotiVote.vue";
-import TileNotiRepost from "./TileNotiRepost.vue";
+import TileNotiVote from "./TileNoti/TileNotiVote.vue";
+import TileNotiRepost from "./TileNoti/TileNotiRepost.vue";
 
 const props = defineProps({
   noti: {

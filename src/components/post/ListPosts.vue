@@ -1,14 +1,20 @@
 <script setup lang="ts">
+import { PropType } from "vue";
 import TilePost from "@/components/post/TilePost.vue";
-import { useAuthorFeed } from "@/lib/query";
+import { useAuthorFeed, useHomeTimeline } from "@/lib/query";
 
 const props = defineProps({
+  kind: {
+    type: String as PropType<"home" | "author-feed">,
+    required: true,
+  },
   actor: {
     type: String,
   },
 });
 
-const { data: feeds, suspense } = useAuthorFeed(props.actor);
+const { data: feeds, suspense } =
+  props.kind == "home" ? useHomeTimeline() : useAuthorFeed(props.actor);
 await suspense();
 </script>
 

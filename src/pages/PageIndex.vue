@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import Loadable from "@/components/common/Loadable.vue";
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
-import Timeline from "@/components/post/Timeline.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
 import { useHomeTimelineFetch, useHomeTimeline } from "@/lib/query";
+import ListPosts from "@/components/post/ListPosts.vue";
 
 const { isFetching } = useHomeTimeline();
 const refetch = useHomeTimelineFetch();
@@ -24,6 +24,6 @@ const refetch = useHomeTimelineFetch();
   </div>
 
   <Loadable>
-    <Timeline />
+    <ListPosts kind="home" />
   </Loadable>
 </template>
