@@ -137,7 +137,7 @@ export const unfollowUser = async (params: { did: string; rkey: string }) =>
   agent.api.app.bsky.graph.follow.delete(params);
 
 export const getProfile = async (params?: {
-  // If omitted, get login user profile
+  // If omitted, get login user's profile
   actor?: string;
 }): Promise<ActorProfile> => {
   const actor = params?.actor || self?.handle;
@@ -157,7 +157,7 @@ export const getProfile = async (params?: {
 };
 
 export const getFollows = async (params?: {
-  // If omitted, get login user profile
+  // If omitted, get login user's follows
   actor?: string;
 }): CursoredResponse<{
   subject: Actor;
@@ -182,7 +182,7 @@ export const getFollows = async (params?: {
 };
 
 export const getFollowers = async (params?: {
-  // If omitted, get login user profile
+  // If omitted, get login user's followers
   actor?: string;
 }): CursoredResponse<{
   subject: Actor;
@@ -205,7 +205,8 @@ export const getFollowers = async (params?: {
   ];
 };
 
-export const getFeed = async (params?: {
+export const getAuthorFeed = async (params?: {
+  // If omitted, get login user's feed
   actor?: string;
 }): CursoredResponse<Feed[]> => {
   const author = params?.actor || self?.handle;
@@ -217,7 +218,7 @@ export const getFeed = async (params?: {
     author,
   });
   if (!success) {
-    throw new Error("getFeed failed");
+    throw new Error("getAuthorFeed failed");
   }
 
   return [data.feed as unknown as Feed[], data.cursor];
@@ -233,7 +234,7 @@ export const repost = async (params: { uri: string; cid: string }) =>
     }
   );
 
-export const upvotePost = async (params: { uri: string; cid: string }) =>
+export const upvote = async (params: { uri: string; cid: string }) =>
   agent.api.app.bsky.feed.vote.create(
     { did: self?.did },
     {
@@ -461,9 +462,15 @@ type NotificationOf<K, R> = {
   indexedAt: string;
 };
 
+export type VoteNotification = NotificationOf<"vote", Record.Vote>;
+export type RepostNotification = NotificationOf<"repost", Record.Repost>;
+export type FollowNotification = NotificationOf<"follow", Record.Follow>;
+export type MentionNotification = NotificationOf<"mention", Record.Post>;
+export type ReplyNotification = NotificationOf<"reply", Record.Post>;
+
 export type Notification =
-  | NotificationOf<"vote", Record.Vote>
-  | NotificationOf<"repost", Record.Repost>
-  | NotificationOf<"follow", Record.Follow>
-  | NotificationOf<"mention", Record.Post>
-  | NotificationOf<"reply", Record.Post>;
+  | VoteNotification
+  | RepostNotification
+  | FollowNotification
+  | MentionNotification
+  | ReplyNotification;

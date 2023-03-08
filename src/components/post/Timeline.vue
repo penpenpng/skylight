@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import TilePost from "@/components/post/TilePost.vue";
-import { useState, refreshTimeline } from "@/store";
 
-const state = useState();
+import { useHomeTimeline } from "@/lib/query";
 
-if (state.timeline.length <= 0) {
-  await refreshTimeline();
-}
+const { data, suspense } = useHomeTimeline();
+await suspense();
 </script>
 
 <template>
-  <TilePost v-for="feed in state.timeline" :feed="feed" :key="feed.post.cid" />
+  <TilePost v-for="feed in data" :feed="feed" :key="feed.post.cid" />
 </template>

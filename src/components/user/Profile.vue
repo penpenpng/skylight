@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, toRaw } from "vue";
+import { reactive, toRaw, Ref } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Loadable from "@/components/common/Loadable.vue";
@@ -8,15 +8,20 @@ import ProfileTab from "@/components/user/ProfileTab.vue";
 import ListPosts from "@/components/post/ListPosts.vue";
 
 import { useSettings } from "@/lib/settings";
-import { getProfile } from "@/lib/atp";
 
 import defaultHero from "@/assets/default-hero.jpg?url";
+import { useActorProfile } from "@/lib/query";
+import { ActorProfile } from "@/lib/atp";
 
 const props = defineProps({
   actor: {
     type: String,
   },
 });
+
+const { data: _user, suspense } = useActorProfile(props.actor);
+await suspense();
+const user = _user as Ref<ActorProfile>; // TODO: ちょっとどうかと思う
 
 interface State {
   tab: string;
@@ -26,7 +31,6 @@ const state = reactive<State>({
   tab: "posts",
 });
 
-const user = await getProfile({ actor: props.actor });
 const settings = useSettings();
 
 const printUserObject = () => {

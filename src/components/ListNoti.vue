@@ -1,14 +1,11 @@
 <script setup lang="ts">
-import { refreshNotification, useState } from "@/store";
-import TileNoti from "./TileNoti.vue";
+import { useNotifications } from "@/lib/query";
+import TileNoti from "./notifications/TileNoti.vue";
 
-const state = useState();
-
-if (state.notifications.length <= 0) {
-  await refreshNotification();
-}
+const { data: notifications, suspense } = useNotifications();
+await suspense();
 </script>
 
 <template>
-  <TileNoti v-for="noti in state.notifications" :noti="noti" :key="noti.cid" />
+  <TileNoti v-for="noti in notifications" :noti="noti" :key="noti.cid" />
 </template>

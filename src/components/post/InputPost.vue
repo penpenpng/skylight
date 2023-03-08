@@ -4,9 +4,9 @@ import twtext from "twitter-text";
 
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
 
-import { postText, ReplyRef } from "@/lib/atp";
+import { ReplyRef } from "@/lib/atp";
 import { smartMerge, debounce } from "@/lib/algorithm";
-import { refreshTimeline } from "@/store";
+import { usePostMutation } from "@/lib/query";
 
 const emits = defineEmits<{
   (ev: "success"): void;
@@ -18,6 +18,7 @@ const props = defineProps({
   },
 });
 
+const { mutate: postText, isLoading: processingPost } = usePostMutation();
 const DEBOUNCE_INTERVAL = 500;
 const MAX_PARSABLE_URL = 4;
 
@@ -29,14 +30,12 @@ interface State {
     indices: [number, number];
     includes: boolean;
   }[];
-  loading: boolean;
 }
 
 let nextId = 1;
 const state = reactive<State>({
   text: "",
   urls: [],
-  loading: false,
 });
 
 const updateUrls = () => {
@@ -68,16 +67,13 @@ const submit = async () => {
 
   state.text = "";
   state.urls = [];
-  state.loading = true;
 
   try {
     await postText({ text, urls, reply: props?.replay });
-    refreshTimeline();
     emits("success");
   } catch {
     emits("error");
   } finally {
-    state.loading = false;
   }
 };
 const onkeydown = (ev: KeyboardEvent) => {
@@ -103,7 +99,7 @@ const onkeydown = (ev: KeyboardEvent) => {
       <ButtonAsync
         class="btn btn-primary input-group-btn column col-auto"
         :onClick="submit"
-        :force-loading="state.loading"
+        :force-loading="processingPost"
       >
         Submit
       </ButtonAsync>

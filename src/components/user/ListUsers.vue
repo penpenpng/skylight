@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import TileUser from "@/components/user/TileUser.vue";
-import { getFollowers, getFollows } from "@/lib/atp";
 import { PropType } from "vue";
+
+import TileUser from "@/components/user/TileUser.vue";
+
+import { useFollowers, useFollows } from "@/lib/query";
 
 const props = defineProps({
   actor: {
@@ -13,15 +15,16 @@ const props = defineProps({
   },
 });
 
-const [{ users: frieds }] =
+const { data: friends, suspense } =
   props.kind === "follows"
-    ? await getFollows({ actor: props.actor })
-    : await getFollowers({ actor: props.actor });
+    ? useFollows(props.actor)
+    : useFollowers(props.actor);
+await suspense();
 </script>
 
 <template>
   <TileUser
-    v-for="friend in frieds"
+    v-for="friend in friends?.users"
     :user="friend"
     :key="friend.handle"
     class="py-2 my-2"

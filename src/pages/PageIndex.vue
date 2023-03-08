@@ -3,8 +3,9 @@ import Loadable from "@/components/common/Loadable.vue";
 import Timeline from "@/components/post/Timeline.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
-import { refreshTimeline } from "@/store";
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
+
+import { fetchHomeTimeline } from "@/lib/query";
 </script>
 
 <template>
@@ -13,7 +14,7 @@ import ButtonAsync from "@/components/common/ButtonAsync.vue";
   <div class="columns col-oneline p-2">
     <ButtonAsync
       class="btn btn-secondary col-ml-auto"
-      :onClick="refreshTimeline"
+      :onClick="fetchHomeTimeline"
     >
       Refresh
     </ButtonAsync>

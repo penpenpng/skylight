@@ -19,6 +19,7 @@
     "spectre.css": "^0.5.9",
     "twitter-text": "^3.1.0",
     "vue": "^3.2.45",
+    "vue-query": "^1.26.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

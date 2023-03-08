@@ -3,14 +3,14 @@ import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import ListNoti from "@/components/ListNoti.vue";
 import Loadable from "@/components/common/Loadable.vue";
 
-import { refreshNotification } from "@/store";
+import { fetchNotifications } from "@/lib/query";
 </script>
 
 <template>
   <div class="columns col-oneline p-2">
     <ButtonAsync
       class="btn btn-secondary col-ml-auto"
-      :onClick="refreshNotification"
+      :onClick="fetchNotifications"
     >
       Refresh
     </ButtonAsync>

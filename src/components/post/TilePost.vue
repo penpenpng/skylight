@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { PropType, computed, toRaw, ref } from "vue";
 
+import Avatar from "@/components/common/Avatar.vue";
+import Username from "@/components/common/Username.vue";
 import TilePostActionButton from "@/components/post/TilePostActionButton.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
-import { Entity, Feed, upvotePost, repost } from "@/lib/atp";
+import { Entity, Feed } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
+import { useRepostMutation, useUpvoteMutation } from "@/lib/query";
 
-import { refreshTimeline } from "@/store";
-import Avatar from "../common/Avatar.vue";
-import Username from "../common/Username.vue";
+const { mutate: repost } = useRepostMutation();
+const { mutate: upvote } = useUpvoteMutation();
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
@@ -127,7 +129,7 @@ const replyTarget = computed(() => {
               repost({
                 cid: post.cid,
                 uri: post.uri,
-              }).then(refreshTimeline)
+              })
             "
           >
             {{ post.repostCount }}
@@ -136,10 +138,10 @@ const replyTarget = computed(() => {
             aria-label="like"
             icon-class="bi bi-heart"
             @click="
-              upvotePost({
+              upvote({
                 cid: post.cid,
                 uri: post.uri,
-              }).then(refreshTimeline)
+              })
             "
           >
             {{ post.upvoteCount }}

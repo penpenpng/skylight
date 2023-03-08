@@ -3,10 +3,11 @@ import { ref, PropType, toRaw } from "vue";
 import { AtUri } from "@atproto/uri";
 
 import Avatar from "@/components/common/Avatar.vue";
+import Username from "@/components/common/Username.vue";
 
-import { Actor, ActorDetail, followUser, unfollowUser } from "@/lib/atp";
+import { Actor, ActorDetail, followUser } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
-import Username from "../common/Username.vue";
+import { useUnfollowMutation } from "@/lib/query";
 
 const props = defineProps({
   user: {
@@ -16,6 +17,9 @@ const props = defineProps({
 });
 
 const settings = useSettings();
+// Cannot useMutation return value?
+// const { mutate: followUser } = useFollowMutation();
+const { mutate: unfollowUser } = useUnfollowMutation();
 const updatedFollowing = ref(false);
 const followingUri = ref(props.user.viewer?.following);
 

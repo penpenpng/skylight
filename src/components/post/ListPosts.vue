@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import TilePost from "@/components/post/TilePost.vue";
-import { getFeed } from "@/lib/atp";
+import { useAuthorFeed } from "@/lib/query";
 
 const props = defineProps({
   actor: {
@@ -8,7 +8,8 @@ const props = defineProps({
   },
 });
 
-const [feeds] = await getFeed({ actor: props.actor });
+const { data: feeds, suspense } = useAuthorFeed(props.actor);
+await suspense();
 </script>
 
 <template>
