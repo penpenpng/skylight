@@ -1,8 +1,6 @@
-import { ref } from "vue";
-import { QueryClient, useMutation, useQuery } from "vue-query";
+import { useMutation, useQuery, useQueryClient } from "vue-query";
 
 import {
-  followUser,
   unfollowUser,
   getAuthorFeed,
   getFollowers,
@@ -26,8 +24,6 @@ const Keys = {
   notifications: () => "notifications",
   post: (uri: string) => ["post", uri],
 } as const;
-
-const client = new QueryClient();
 
 export const useHomeTimeline = () => {
   const query = useQuery(Keys.homeTimeline(), () =>
@@ -86,11 +82,15 @@ export const usePost = (uri: string) => {
   return useQuery(Keys.post(uri), () => getPost({ uri }));
 };
 
-export const fetchHomeTimeline = () =>
-  client.setQueryData(Keys.homeTimeline(), () => getTimeline({ limit: 100 }));
+export const fetchHomeTimeline = async () => {
+  const client = useQueryClient();
+  client.fetchQuery(Keys.homeTimeline(), () => getTimeline({ limit: 100 }));
+};
 
-export const fetchNotifications = () =>
-  client.setQueryData(Keys.notifications(), () => getNotifications());
+export const fetchNotifications = () => {
+  const client = useQueryClient();
+  client.fetchQuery(Keys.notifications(), () => getNotifications());
+};
 
 export const usePostMutation = () => {
   return useMutation(postText, {
