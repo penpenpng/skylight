@@ -13,20 +13,6 @@ const state = reactive({
 </script>
 
 <template>
-  <div class="form-group">
-    <label class="form-switch">
-      <input
-        type="checkbox"
-        :checked="settings.enabledDeveloperMode"
-        @change="
-          updateSettings({
-            enabledDeveloperMode: !settings.enabledDeveloperMode,
-          })
-        "
-      />
-      <i class="form-icon"></i>Enable developer mode
-    </label>
-  </div>
   <div>
     <ButtonAsync
       class="btn"

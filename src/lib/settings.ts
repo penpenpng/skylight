@@ -1,13 +1,12 @@
 import { reactive } from "vue";
 
 interface Settings {
-  enabledDeveloperMode: boolean;
+  useRelativeTime: boolean;
 }
 
 const SETTINGS_LOCALSTORAGE_KEY = "settings";
 
 const settings = reactive<Settings>({
-  enabledDeveloperMode: false,
   ...JSON.parse(localStorage.getItem(SETTINGS_LOCALSTORAGE_KEY) || "{}"),
 });
 

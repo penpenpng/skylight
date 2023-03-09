@@ -66,7 +66,7 @@ const { printObject, copyObject } = useObjectInspector(user);
         <div v-if="actor" class="column col-auto">
           <ButtonFollow :user="user" />
         </div>
-        <div v-if="settings.enabledDeveloperMode" class="column col-auto">
+        <div class="column col-auto">
           <Dropdown
             :keys="['print-object', 'copy-object']"
             right

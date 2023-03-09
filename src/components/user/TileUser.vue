@@ -42,7 +42,6 @@ const { printObject, copyObject } = useObjectInspector(props.user);
     <div class="tile-action mx-2">
       <ButtonFollow :user="user" class="mr-2" />
       <Dropdown
-        v-if="settings.enabledDeveloperMode"
         :keys="['print-object', 'copy-object']"
         right
         @print-object="printObject"

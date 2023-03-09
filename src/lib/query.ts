@@ -92,6 +92,11 @@ export const useNotificationFetch = () => {
   return () => client.refetchQueries(Keys.notifications());
 };
 
+export const useAuthorFeedFetch = () => {
+  const client = useQueryClient();
+  return (actor?: string) => client.refetchQueries(Keys.authorFeed(actor));
+};
+
 export const usePostMutation = () => {
   const refetch = useHomeTimelineFetch();
   return useMutation(postText, {

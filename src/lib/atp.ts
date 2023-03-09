@@ -116,6 +116,9 @@ export const postText = async (params: {
   );
 };
 
+export const deletePost = async (params: { uri: string }) =>
+  agent.api.com.atproto.repo.deleteRecord(parseUri(params.uri));
+
 export const searchUsers = async (params: {
   term: string;
 }): CursoredResponse<ActorDetail[]> => {
@@ -136,8 +139,8 @@ export const followUser = async (params: { did: string; cid: string }) =>
     }
   );
 
-export const unfollowUser = async (params: { did: string; rkey: string }) =>
-  agent.api.app.bsky.graph.follow.delete(params);
+export const unfollowUser = async (params: { uri: string }) =>
+  agent.api.app.bsky.graph.follow.delete(parseUri(params.uri));
 
 export const getProfile = async (params?: {
   // If omitted, get login user's profile
@@ -274,7 +277,15 @@ export const getPostThread = async (params: {
 export const updateHandle = async (params: { handle: string }) =>
   agent.api.com.atproto.handle.update({ handle: params.handle });
 
-export const getDidByUri = (uri: string): string => new AtUri(uri).hostname;
+export const parseUri = (uri: string) => {
+  const aturi = new AtUri(uri);
+
+  return {
+    did: aturi.hostname,
+    collection: aturi.collection,
+    rkey: aturi.rkey,
+  };
+};
 
 export interface Feed {
   post: Post;

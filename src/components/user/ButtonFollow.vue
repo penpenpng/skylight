@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { ref, PropType } from "vue";
-import { AtUri } from "@atproto/uri";
 
 import { Actor, ActorDetail, followUser } from "@/lib/atp";
 import { useUnfollowMutation } from "@/lib/query";
@@ -34,10 +33,8 @@ const follow = async () => {
 const unfollow = async () => {
   try {
     if (followingUri.value) {
-      const atUri = new AtUri(followingUri.value);
       await unfollowUser({
-        did: atUri.hostname,
-        rkey: atUri.rkey,
+        uri: followingUri.value,
       });
       updatedFollowing.value = !updatedFollowing.value;
     }

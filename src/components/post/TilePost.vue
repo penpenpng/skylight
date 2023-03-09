@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed } from "vue";
+import { useRoute } from "vue-router";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
@@ -10,18 +11,44 @@ import TilePostActions from "@/components/post/TilePost/TilePostActions.vue";
 import TileEmbedImage from "@/components/post/TilePost/TileEmbedImage.vue";
 import TileEmbedExternal from "@/components/post/TilePost/TileEmbedExternal.vue";
 
-import { Embed, Feed } from "@/lib/atp";
-import { useSettings } from "@/lib/settings";
+import { Embed, Feed, isMe, deletePost } from "@/lib/atp";
 import { useObjectInspector } from "@/lib/composable";
+import { useAuthorFeedFetch, useHomeTimelineFetch } from "@/lib/query";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
 });
-const settings = useSettings();
 
 const { printObject, copyObject } = useObjectInspector(props.feed);
+const refetchAuthorFeed = useAuthorFeedFetch();
+const refetchHomeTimeline = useHomeTimelineFetch();
 
 const post = computed(() => props.feed.post);
+const route = useRoute();
+
+const menu = computed(() => {
+  const keys: string[] = [];
+
+  if (
+    isMe(props.feed.post.author.did) &&
+    ["my-profile", "index"].includes(String(route.name))
+  ) {
+    keys.push("delete-post");
+  }
+  keys.push("print-object");
+  keys.push("copy-object");
+
+  return keys;
+});
+
+const deletePostAndRefetch = async () => {
+  await deletePost({ uri: props.feed.post.uri });
+  if (route.name === "my-profile") {
+    refetchAuthorFeed();
+  } else if (route.name === "index") {
+    refetchHomeTimeline();
+  }
+};
 </script>
 
 <template>
@@ -60,13 +87,15 @@ const post = computed(() => props.feed.post);
         />
         <TilePostActions :feed="feed" />
       </div>
-      <div v-if="settings.enabledDeveloperMode">
+      <div v-if="menu.length > 0">
         <Dropdown
-          :keys="['print-object', 'copy-object']"
+          :keys="menu"
           right
+          @delete-post="deletePostAndRefetch"
           @print-object="printObject"
           @copy-object="copyObject"
         >
+          <template #delete-post>Delete Post</template>
           <template #print-object>Print Object</template>
           <template #copy-object>Copy Object</template>
         </Dropdown>
@@ -76,8 +105,6 @@ const post = computed(() => props.feed.post);
 </template>
 
 <style scoped>
-
-
 .tile-post {
   padding: 0.8rem 0.4rem 0.6rem;
   border-bottom: 1px solid #e3e3e3;
