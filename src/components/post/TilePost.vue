@@ -7,8 +7,9 @@ import Dropdown from "@/components/common/Dropdown.vue";
 import TilePostRepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
 import TilePostContent from "@/components/post/TilePost/TilePostContent.vue";
 import TilePostActions from "@/components/post/TilePost/TilePostActions.vue";
+import TileEmbedImage from "@/components/post/TilePost/TileEmbedImage.vue";
 
-import { Feed } from "@/lib/atp";
+import { Embed, Feed } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
 import { useObjectInspector } from "@/lib/composable";
 
@@ -46,6 +47,10 @@ const post = computed(() => props.feed.post);
         <div class="tile-subtitle">
           <TilePostContent :feed="feed" />
         </div>
+        <TileEmbedImage
+          v-if="Embed.isImage(feed.post.embed)"
+          :embed="feed.post.embed"
+        />
         <TilePostActions :feed="feed" />
       </div>
       <div v-if="settings.enabledDeveloperMode">

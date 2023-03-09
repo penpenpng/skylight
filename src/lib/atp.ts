@@ -359,6 +359,9 @@ export namespace Embed {
       alt: string;
     }[];
   }
+  export const isImage = (
+    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
+  ): embed is Embed.Image => !!(embed && (embed as any).images);
 
   export interface External {
     external: {

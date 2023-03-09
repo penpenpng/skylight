@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { PropType, computed } from "vue";
 
+import Username from "@/components/common/Username.vue";
+
 import { Feed, Entity } from "@/lib/atp";
 
 const props = defineProps({
