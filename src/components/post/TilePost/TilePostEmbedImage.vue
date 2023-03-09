@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue";
 import { Embed } from "@/lib/atp";
+import _FsLightbox from "fslightbox-vue/v3.js";
+
+// https://github.com/banthagroup/fslightbox-vue/issues/67
+const FsLightbox = _FsLightbox.default || _FsLightbox;
 
 const props = defineProps({
   embed: {
