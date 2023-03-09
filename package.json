@@ -9,7 +9,7 @@
   "license": "MIT",
   "scripts": {
     "dev": "vite",
-    "build": "NODE_ENV=development vue-tsc && vite build",
+    "build": "vue-tsc && vite build --mode test",
     "preview": "vite preview"
   },
   "dependencies": {
