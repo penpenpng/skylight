@@ -34,7 +34,6 @@ const state = reactive<State>({
   tab: "posts",
 });
 
-const settings = useSettings();
 const { printObject, copyObject } = useObjectInspector(user);
 </script>
 
@@ -82,7 +81,7 @@ const { printObject, copyObject } = useObjectInspector(user);
     </div>
   </div>
 
-  <ProfileTab :tab="state.tab" @switch="state.tab = $event" />
+  <ProfileTab :user="user" :tab="state.tab" @switch="state.tab = $event" />
 
   <Loadable v-if="state.tab === 'follows'">
     <ListUsers kind="follows" :actor="actor" />

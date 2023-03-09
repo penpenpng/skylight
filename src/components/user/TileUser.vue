@@ -3,27 +3,21 @@ import { PropType } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
-import Dropdown from "@/components/common/Dropdown.vue";
 import ButtonFollow from "@/components/user/ButtonFollow.vue";
 
 import { Actor, ActorDetail } from "@/lib/atp";
-import { useSettings } from "@/lib/settings";
-import { useObjectInspector } from "@/lib/composable";
 
-const props = defineProps({
+defineProps({
   user: {
     type: Object as PropType<ActorDetail | Actor>,
     required: true,
   },
 });
-
-const settings = useSettings();
-const { printObject, copyObject } = useObjectInspector(props.user);
 </script>
 
 <template>
-  <article class="tile hoverable">
-    <div class="tile-icon">
+  <article class="tile-user tile hoverable">
+    <div class="tile-icon mr-1">
       <Avatar
         :src="user.avatar"
         :display-name="user.displayName"
@@ -39,17 +33,15 @@ const { printObject, copyObject } = useObjectInspector(props.user);
       </div>
       <span v-if="!!user.viewer?.followedBy" class="chip">Follows You</span>
     </div>
-    <div class="tile-action mx-2">
+    <div class="tile-action">
       <ButtonFollow :user="user" class="mr-2" />
-      <Dropdown
-        :keys="['print-object', 'copy-object']"
-        right
-        @print-object="printObject"
-        @copy-object="copyObject"
-      >
-        <template #print-object>Print Object</template>
-        <template #copy-object>Copy Object</template>
-      </Dropdown>
     </div>
   </article>
 </template>
+
+<style scoped>
+.tile-user {
+  border-bottom: 1px solid #e3e3e3;
+  align-items: center;
+}
+</style>
