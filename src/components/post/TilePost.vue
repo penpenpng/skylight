@@ -8,6 +8,7 @@ import TilePostRepostChip from "@/components/post/TilePost/TilePostRepostChip.vu
 import TilePostContent from "@/components/post/TilePost/TilePostContent.vue";
 import TilePostActions from "@/components/post/TilePost/TilePostActions.vue";
 import TileEmbedImage from "@/components/post/TilePost/TileEmbedImage.vue";
+import TileEmbedExternal from "@/components/post/TilePost/TileEmbedExternal.vue";
 
 import { Embed, Feed } from "@/lib/atp";
 import { useSettings } from "@/lib/settings";
@@ -50,6 +51,12 @@ const post = computed(() => props.feed.post);
         <TileEmbedImage
           v-if="Embed.isImage(feed.post.embed)"
           :embed="feed.post.embed"
+          class="mt-3"
+        />
+        <TileEmbedExternal
+          v-else-if="Embed.isExternal(feed.post.embed)"
+          :embed="feed.post.embed"
+          class="mt-3"
         />
         <TilePostActions :feed="feed" />
       </div>
@@ -69,6 +76,8 @@ const post = computed(() => props.feed.post);
 </template>
 
 <style scoped>
+
+
 .tile-post {
   padding: 0.8rem 0.4rem 0.6rem;
   border-bottom: 1px solid #e3e3e3;

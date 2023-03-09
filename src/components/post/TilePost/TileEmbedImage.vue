@@ -24,8 +24,7 @@ const { show, onHide, visibleRef, indexRef, imgsRef } = useEasyLightbox({
       :key="idx"
       :src="thumb"
       :alt="alt"
-      height="200"
-      class="c-hand"
+      class="c-hand image-thumb"
       @click="show(idx)"
     />
     <VueEasyLightbox
@@ -42,16 +41,27 @@ const { show, onHide, visibleRef, indexRef, imgsRef } = useEasyLightbox({
 
 <style scoped>
 .image-container {
-  margin-top: 10px;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-rows: 200px;
+  grid-template-rows: 150px;
+  grid-auto-rows: 150px;
   row-gap: 10px;
   column-gap: 10px;
   justify-items: stretch;
+  align-items: stretch;
+}
+
+.image-thumb {
+  transition: transform 0.2s ease;
+}
+
+.image-thumb:hover {
+  transform: scale(1.02);
 }
 
 .image-container img {
   object-fit: cover;
+  max-height: 100%;
+  width: 100%;
 }
 </style>

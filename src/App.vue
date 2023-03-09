@@ -40,6 +40,10 @@ body,
   padding: 10px;
 }
 
+.mt-3 {
+  margin-top: 12px;
+}
+
 .btn-link.btn-icon {
   padding: 0;
   height: 1.1rem;

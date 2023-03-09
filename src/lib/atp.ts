@@ -371,6 +371,9 @@ export namespace Embed {
       thumb?: string;
     };
   }
+  export const isExternal = (
+    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
+  ): embed is Embed.External => !!(embed && (embed as any).external);
 
   export interface Record {
     record:
@@ -384,6 +387,9 @@ export namespace Embed {
           uri: string;
         };
   }
+  export const isRecord = (
+    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
+  ): embed is Embed.Record => !!(embed && (embed as any).record);
 }
 
 export namespace Viewer {
