@@ -5,6 +5,7 @@ import PageIndex from "@/pages/PageIndex.vue";
 import PageNoti from "@/pages/PageNoti.vue";
 import PageSearchUser from "@/pages/PageSearchUser.vue";
 import PageProfile from "@/pages/PageProfile.vue";
+import PagePost from "@/pages/PageProfile.vue";
 import PageSettings from "@/pages/PageSettings.vue";
 
 import { isMe, tryResumeSession } from "@/lib/atp";
@@ -65,6 +66,13 @@ export const router = createRouter({
           next();
         }
       },
+    },
+    {
+      name: "post",
+      path: "/profile/:actor/post/:rkey",
+      component: PagePost,
+      props: true,
+      beforeEnter: assumeLogin,
     },
     {
       name: "settings",

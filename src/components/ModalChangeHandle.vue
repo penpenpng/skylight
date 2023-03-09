@@ -40,7 +40,7 @@ const verifyHandle = async () => {
     <div class="modal-container">
       <div class="modal-header">
         <button class="btn btn-clear float-right" @click="close"></button>
-        <h5 class="modal-title">Change my handle</h5>
+        <h5 class="modal-title">Edit your handle</h5>
       </div>
       <div class="modal-body">
         <div class="content">

@@ -1,7 +1,7 @@
 import { reactive } from "vue";
 
 interface Settings {
-  useRelativeTime: boolean;
+  enableRelativeTime: boolean;
 }
 
 const SETTINGS_LOCALSTORAGE_KEY = "settings";

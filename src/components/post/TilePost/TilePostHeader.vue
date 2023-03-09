@@ -4,10 +4,13 @@ import { PropType } from "vue";
 import Username from "@/components/common/Username.vue";
 
 import { Post } from "@/lib/atp";
+import { useDatetimeString } from "@/lib/datetime";
 
-defineProps({
+const props = defineProps({
   post: { type: Object as PropType<Post>, required: true },
 });
+
+const datetime = useDatetimeString(props.post.indexedAt);
 </script>
 
 <template>
@@ -17,7 +20,7 @@ defineProps({
       class="width-user-name text-ellipsis d-inline-block"
     />
     <small class="text-gray ml-2">
-      {{ new Date(post.indexedAt).toLocaleTimeString() }}
+      {{ datetime }}
     </small>
   </div>
 </template>

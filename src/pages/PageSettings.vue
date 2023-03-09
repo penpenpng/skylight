@@ -13,6 +13,20 @@ const state = reactive({
 </script>
 
 <template>
+  <div class="form-group">
+    <label class="form-switch">
+      <input
+        type="checkbox"
+        :checked="settings.enableRelativeTime"
+        @change="
+          updateSettings({
+            enableRelativeTime: !settings.enableRelativeTime,
+          })
+        "
+      />
+      <i class="form-icon"></i>Enable relative time
+    </label>
+  </div>
   <div>
     <ButtonAsync
       class="btn"

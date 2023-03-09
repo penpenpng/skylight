@@ -3,36 +3,47 @@ import { PropType } from "vue";
 
 import { Embed } from "@/lib/atp";
 
-defineProps({
+const props = defineProps({
   embed: {
     type: Object as PropType<Embed.External>,
     required: true,
   },
 });
+
+const openExternal = () => {
+  window.open(props.embed.external.uri);
+};
 </script>
 
 <template>
-  <div class="card" style="max-width: 400px">
-    <div v-if="embed.external.thumb" class="card-image c-hand">
-      <a :href="embed.external.uri" target="_blank" style="color: black">
-        <img :src="embed.external.thumb" class="img-responsive" />
-      </a>
-    </div>
-    <div class="card-header">
-      <h5 class="card-title text-ellipsis mb-0">
-        <a :href="embed.external.uri" target="_blank" style="color: black">{{
-          embed.external.title
-        }}</a>
-      </h5>
-      <div class="card-subtitle text-gray text-ellipsis">
-        {{ embed.external.uri }}
+  <div class="card external c-hand" @click="openExternal">
+    <div class="external-body">
+      <div class="card-header">
+        <h5 class="card-title mb-0">
+          <div class="line-clamp-1">{{ embed.external.title }}</div>
+        </h5>
+        <div class="card-subtitle text-gray">
+          <div class="line-clamp-1">{{ embed.external.uri }}</div>
+        </div>
       </div>
-    </div>
-    <div
-      v-if="embed.external.description"
-      class="card-body text-small text-ellipsis pt-1"
-    >
-      {{ embed.external.description }}
+      <div v-if="embed.external.description" class="card-body text-small pt-1">
+        <div class="line-clamp-3">{{ embed.external.description }}</div>
+      </div>
     </div>
   </div>
 </template>
+
+<style scoped>
+.external-image {
+  height: 150px;
+  max-width: 400px;
+  width: 100%;
+}
+
+.external-image img {
+  object-fit: cover;
+  max-height: 100%;
+  max-width: 100%;
+  height: 100%;
+}
+</style>

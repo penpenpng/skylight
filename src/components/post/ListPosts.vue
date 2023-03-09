@@ -19,5 +19,9 @@ await suspense();
 </script>
 
 <template>
-  <TilePost v-for="feed in feeds" :feed="feed" :key="feed.post.cid" />
+  <TilePost
+    v-for="feed in feeds"
+    :feed="feed"
+    :key="feed.post.uri + (feed.reason?.by || '')"
+  />
 </template>

@@ -58,7 +58,9 @@ const getElements = (text: string, entities: Entity[]) => {
         v-else-if="e.type === 'mention'"
         :to="{ name: 'profile', params: { actor: e.href } }"
         >{{ e.text }}</RouterLink
-      ><a v-else :href="e.href" target="_blank">{{ e.text }}</a>
+      ><a v-else :href="e.href" target="_blank" class="line-clamp-1">{{
+        e.text
+      }}</a>
     </template>
   </div>
 </template>
