@@ -1,7 +1,5 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue";
-import FsLightbox from "fslightbox-vue/v3";
-
 import { Embed } from "@/lib/atp";
 
 const props = defineProps({
