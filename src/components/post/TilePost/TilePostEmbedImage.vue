@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { PropType } from "vue";
-import VueEasyLightbox, { useEasyLightbox } from "vue-easy-lightbox";
+import { PropType, ref } from "vue";
+import FsLightbox from "fslightbox-vue/v3";
 
 import { Embed } from "@/lib/atp";
 
@@ -11,10 +11,12 @@ const props = defineProps({
   },
 });
 
-const { show, onHide, visibleRef, indexRef, imgsRef } = useEasyLightbox({
-  imgs: props.embed.images.map((e) => e.fullsize),
-  initIndex: 0,
-});
+const toggler = ref(false);
+const slide = ref<number>(0);
+const onClickThumb = (index: number) => {
+  slide.value = index + 1;
+  toggler.value = !toggler.value;
+};
 </script>
 
 <template>
@@ -25,17 +27,17 @@ const { show, onHide, visibleRef, indexRef, imgsRef } = useEasyLightbox({
       :src="thumb"
       :alt="alt"
       class="c-hand image-thumb"
-      @click="show(idx)"
+      @click="onClickThumb(idx)"
     />
-    <VueEasyLightbox
-      :visible="visibleRef"
-      :imgs="imgsRef"
-      :index="indexRef"
-      loop
-      move-disabled
-      @hide="onHide"
-    >
-    </VueEasyLightbox>
+    <FsLightbox
+      type="image"
+      disableLocalStorage
+      exitFullscreenOnClose
+      :toggler="toggler"
+      :sources="props.embed.images.map((e) => e.fullsize)"
+      :customAttributes="props.embed.images.map((e) => ({ alt: e.alt }))"
+      :slide="slide"
+    />
   </div>
 </template>
 

@@ -1,1 +1,1 @@
-declare module "vue-cool-lightbox";
+declare module "fslightbox-vue/v3";
