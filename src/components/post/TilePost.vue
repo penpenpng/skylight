@@ -3,13 +3,14 @@ import { PropType, computed } from "vue";
 import { useRoute } from "vue-router";
 
 import Avatar from "@/components/common/Avatar.vue";
-import Username from "@/components/common/Username.vue";
 import Dropdown from "@/components/common/Dropdown.vue";
-import TilePostRepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
-import TilePostContent from "@/components/post/TilePost/TilePostContent.vue";
-import TilePostActions from "@/components/post/TilePost/TilePostActions.vue";
-import TileEmbedImage from "@/components/post/TilePost/TileEmbedImage.vue";
-import TileEmbedExternal from "@/components/post/TilePost/TileEmbedExternal.vue";
+import RepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
+import Header from "@/components/post/TilePost/TilePostHeader.vue";
+import Content from "@/components/post/TilePost/TilePostContent.vue";
+import Actions from "@/components/post/TilePost/TilePostActions.vue";
+import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
+import EmbedExternal from "@/components/post/TilePost/TilePostEmbedExternal.vue";
+import EmbedRecord from "@/components/post/TilePost/TilePostEmbedRecord.vue";
 
 import { Embed, Feed, isMe, deletePost } from "@/lib/atp";
 import { useObjectInspector } from "@/lib/composable";
@@ -53,7 +54,7 @@ const deletePostAndRefetch = async () => {
 
 <template>
   <div class="tile-post hoverable">
-    <TilePostRepostChip v-if="feed.reason?.by" :reposted-by="feed.reason?.by" />
+    <RepostChip v-if="feed.reason?.by" :reposted-by="feed.reason?.by" />
     <article class="tile" :class="{ 'pl-2': feed.reason?.by }">
       <div class="tile-icon">
         <Avatar
@@ -63,29 +64,31 @@ const deletePostAndRefetch = async () => {
         />
       </div>
       <div class="tile-content">
-        <div class="tile-title d-inline-flex">
-          <Username
-            :user="post.author"
-            class="width-user-name text-ellipsis d-inline-block"
-          />
-          <small class="text-gray ml-2">
-            {{ new Date(post.indexedAt).toLocaleTimeString() }}
-          </small>
+        <div class="tile-title">
+          <Header :post="feed.post" />
         </div>
         <div class="tile-subtitle">
-          <TilePostContent :feed="feed" />
+          <Content :feed="feed" />
         </div>
-        <TileEmbedImage
+        <EmbedImage
           v-if="Embed.isImage(feed.post.embed)"
           :embed="feed.post.embed"
           class="mt-3"
         />
-        <TileEmbedExternal
+        <EmbedExternal
           v-else-if="Embed.isExternal(feed.post.embed)"
           :embed="feed.post.embed"
           class="mt-3"
         />
-        <TilePostActions :feed="feed" />
+        <EmbedRecord
+          v-else-if="
+            Embed.isRecord(feed.post.embed) ||
+            Embed.isRecordNotFound(feed.post.embed)
+          "
+          :embed="feed.post.embed"
+          class="mt-3"
+        />
+        <Actions :feed="feed" />
       </div>
       <div v-if="menu.length > 0">
         <Dropdown

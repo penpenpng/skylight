@@ -301,7 +301,7 @@ export interface Post {
   cid: string;
   author: Actor;
   record: Record.Post;
-  embed?: Embed.Image | Embed.External | Embed.Record;
+  embed?: Embed.Any;
   replyCount: number;
   repostCount: number;
   upvoteCount: number;
@@ -363,6 +363,12 @@ export namespace Reason {
 }
 
 export namespace Embed {
+  export type Any =
+    | Embed.Image
+    | Embed.External
+    | Embed.Record
+    | Embed.RecordNotFound;
+
   export interface Image {
     images: {
       thumb: string;
@@ -371,7 +377,7 @@ export namespace Embed {
     }[];
   }
   export const isImage = (
-    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
+    embed: Embed.Any | undefined | null
   ): embed is Embed.Image => !!(embed && (embed as any).images);
 
   export interface External {
@@ -383,24 +389,30 @@ export namespace Embed {
     };
   }
   export const isExternal = (
-    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
+    embed: Embed.Any | undefined | null
   ): embed is Embed.External => !!(embed && (embed as any).external);
 
   export interface Record {
-    record:
-      | {
-          uri: string;
-          cid: string;
-          author: Actor;
-          record: {};
-        }
-      | {
-          uri: string;
-        };
+    record: {
+      uri: string;
+      cid: string;
+      author: Actor;
+      record: Record.Post;
+    };
   }
   export const isRecord = (
-    embed: Embed.Image | Embed.External | Embed.Record | undefined | null
-  ): embed is Embed.Record => !!(embed && (embed as any).record);
+    embed: Embed.Any | undefined | null
+  ): embed is Embed.Record => !!(embed && (embed as any).record?.cid);
+
+  export interface RecordNotFound {
+    record: {
+      uri: string;
+    };
+  }
+  export const isRecordNotFound = (
+    embed: Embed.Any | undefined | null
+  ): embed is Embed.RecordNotFound =>
+    !!(embed && (embed as any).record) && !(embed as any).record?.cid;
 }
 
 export namespace Viewer {
