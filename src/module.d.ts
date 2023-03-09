@@ -1,1 +1,1 @@
-declare module "fslightbox-vue/v3";
+declare module "fslightbox-vue/v3.js";

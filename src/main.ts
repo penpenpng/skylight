@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import { VueQueryPlugin } from "vue-query";
-import FsLightbox from "fslightbox-vue/v3";
+import FsLightbox from "fslightbox-vue/v3.js";
 import "spectre.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
