@@ -8,13 +8,6 @@ import { AtpError } from "@/lib/atp";
 
 const route = useRoute();
 const router = useRouter();
-const key = computed(() => {
-  if (route.name === "my-profile" || route.name === "profile") {
-    return route.path;
-  }
-
-  return undefined;
-});
 
 onErrorCaptured((err) => {
   if (err instanceof AtpError) {
@@ -33,7 +26,7 @@ onErrorCaptured((err) => {
       <Loadable>
         <RouterView v-slot="{ Component }">
           <KeepAlive>
-            <component :is="Component" :key="key" />
+            <component :is="Component" :key="route.path" />
           </KeepAlive>
         </RouterView>
       </Loadable>
