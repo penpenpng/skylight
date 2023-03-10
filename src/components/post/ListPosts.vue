@@ -22,6 +22,6 @@ await suspense();
   <TilePost
     v-for="feed in feeds"
     :feed="feed"
-    :key="feed.post.uri + (feed.reason?.by || '')"
+    :key="feed.post.uri + (`+${feed.reason?.by.handle}` || '')"
   />
 </template>
