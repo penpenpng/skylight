@@ -16,14 +16,18 @@ const openExternal = () => {
 </script>
 
 <template>
-  <div class="card external c-hand" @click="openExternal">
+  <div class="card card-external c-hand" @click="openExternal">
     <div class="external-body">
       <div class="card-header">
         <h5 class="card-title mb-0">
-          <div class="text-ellipsis">{{ embed.external.title }}</div>
+          <div class="wrap-anywhere line-clamp-1">
+            {{ embed.external.title }}
+          </div>
         </h5>
         <div class="card-subtitle text-gray">
-          <div class="text-ellipsis">{{ embed.external.uri }}</div>
+          <div class="wrap-anywhere line-clamp-1">
+            {{ embed.external.uri }}
+          </div>
         </div>
       </div>
       <div v-if="embed.external.description" class="card-body text-small pt-1">
@@ -34,10 +38,8 @@ const openExternal = () => {
 </template>
 
 <style scoped>
-.external {
-  height: 150px;
-  max-width: 400px;
-  width: 100%;
+.card-external {
+  max-width: min(100%, 400px);
 }
 
 .external-image img {

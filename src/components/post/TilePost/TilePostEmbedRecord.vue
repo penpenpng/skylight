@@ -14,15 +14,25 @@ defineProps({
 </script>
 
 <template>
-  <div class="card" style="max-width: 400px">
+  <div class="card d-block card-record">
     <template v-if="Embed.isRecordNotFound(embed)"
       >{{ embed.record.uri }}
     </template>
     <template v-if="Embed.isRecord(embed)">
-      <div class="card-header"><Username :user="embed.record.author" /></div>
-      <div class="card-body text-small text-ellipsis pt-1">
-        <div class="line-clamp-3 pre-line">{{ embed.record.record.text }}</div>
+      <div class="card-header text-ellipsis">
+        <Username :user="embed.record.author" />
+      </div>
+      <div class="card-body text-small pt-1">
+        <div class="pre-line wrap-anywhere line-clamp-3">
+          {{ embed.record.record.text }}
+        </div>
       </div>
     </template>
   </div>
 </template>
+
+<style scoped>
+.card-record {
+  max-width: min(100%, 400px);
+}
+</style>
