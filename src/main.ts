@@ -24,7 +24,8 @@ createApp(App)
   .use(router)
   .mount("#app");
 
-const { success } = await tryResumeSession();
-if (!success) {
-  router.replace({ name: "login" });
-}
+tryResumeSession().then(({ success }) => {
+  if (!success) {
+    router.replace({ name: "login" });
+  }
+});
