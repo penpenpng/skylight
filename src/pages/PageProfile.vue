@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref, onErrorCaptured } from "vue";
+
 import Loadable from "@/components/common/Loadable.vue";
 import Profile from "@/components/user/Profile.vue";
-import { ref, onErrorCaptured } from "vue";
 
 defineProps({
   actor: {

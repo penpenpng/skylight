@@ -1,9 +1,28 @@
 <script setup lang="ts">
+import { computed, onErrorCaptured } from "vue";
+import { useRoute, useRouter } from "vue-router";
+
 import TheHeader from "@/components/TheHeader.vue";
-import { useRoute } from "vue-router";
-import Loadable from "./components/common/Loadable.vue";
+import Loadable from "@/components/common/Loadable.vue";
+import { AtpError } from "@/lib/atp";
 
 const route = useRoute();
+const router = useRouter();
+const key = computed(() => {
+  if (route.name === "my-profile" || route.name === "profile") {
+    return route.path;
+  }
+
+  return undefined;
+});
+
+onErrorCaptured((err) => {
+  if (err instanceof AtpError) {
+    router.push({ name: "login" });
+  } else {
+    throw err;
+  }
+});
 </script>
 
 <template>
@@ -12,7 +31,11 @@ const route = useRoute();
 
     <div class="main-view">
       <Loadable>
-        <RouterView :key="route.path" />
+        <RouterView v-slot="{ Component }">
+          <KeepAlive>
+            <component :is="Component" :key="key" />
+          </KeepAlive>
+        </RouterView>
       </Loadable>
     </div>
   </main>

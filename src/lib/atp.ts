@@ -19,6 +19,12 @@ const getCreatedAt = () => new Date().toISOString();
 export const isMe = (actor: string) =>
   actor === self?.did || actor === self?.handle;
 
+export class AtpError extends Error {
+  constructor(msg?: string) {
+    super(msg);
+  }
+}
+
 export const tryResumeSession = async () => {
   const session = (() => {
     const sessStr = localStorage.getItem(SES_LOCAL_STORAGE_KEY);
@@ -76,7 +82,7 @@ export const getTimeline = async (params: {
     algorithm: "reverse-chronological",
   });
   if (!success) {
-    throw new Error("getTimeline failed");
+    throw new AtpError("getTimeline failed");
   }
 
   return [data.feed as unknown as Feed[], data.cursor];
@@ -85,7 +91,7 @@ export const getTimeline = async (params: {
 export const getNotifications = async (): CursoredResponse<Notification[]> => {
   const { success, data } = await agent.api.app.bsky.notification.list();
   if (!success) {
-    throw new Error("getTimeline failed");
+    throw new AtpError("getTimeline failed");
   }
 
   return [data.notifications as unknown as Notification[], data.cursor];
@@ -124,7 +130,7 @@ export const searchUsers = async (params: {
 }): CursoredResponse<ActorDetail[]> => {
   const { success, data } = await agent.api.app.bsky.actor.search(params);
   if (!success) {
-    throw new Error("searchUsers failed");
+    throw new AtpError("searchUsers failed");
   }
 
   return [data.users as ActorDetail[], data.cursor];
@@ -148,7 +154,7 @@ export const getProfile = async (params?: {
 }): Promise<ActorProfile> => {
   const actor = params?.actor || self?.handle;
   if (!actor) {
-    throw new Error();
+    throw new AtpError();
   }
 
   const { success, data } = await agent.api.app.bsky.actor.getProfile({
@@ -156,7 +162,7 @@ export const getProfile = async (params?: {
   });
 
   if (!success) {
-    throw new Error("getProfile failed");
+    throw new AtpError("getProfile failed");
   }
 
   return data as ActorProfile;
@@ -171,14 +177,14 @@ export const getFollows = async (params?: {
 }> => {
   const user = params?.actor || self?.handle;
   if (!user) {
-    throw new Error();
+    throw new AtpError();
   }
 
   const { success, data } = await agent.api.app.bsky.graph.getFollows({
     user,
   });
   if (!success) {
-    throw new Error("getFollows failed");
+    throw new AtpError("getFollows failed");
   }
 
   return [
@@ -196,13 +202,13 @@ export const getFollowers = async (params?: {
 }> => {
   const user = params?.actor || self?.handle;
   if (!user) {
-    throw new Error();
+    throw new AtpError();
   }
   const { success, data } = await agent.api.app.bsky.graph.getFollowers({
     user,
   });
   if (!success) {
-    throw new Error("getFollowers failed");
+    throw new AtpError("getFollowers failed");
   }
 
   return [
@@ -217,14 +223,14 @@ export const getAuthorFeed = async (params?: {
 }): CursoredResponse<Feed[]> => {
   const author = params?.actor || self?.handle;
   if (!author) {
-    throw new Error();
+    throw new AtpError();
   }
 
   const { success, data } = await agent.api.app.bsky.feed.getAuthorFeed({
     author,
   });
   if (!success) {
-    throw new Error("getAuthorFeed failed");
+    throw new AtpError("getAuthorFeed failed");
   }
 
   return [data.feed as unknown as Feed[], data.cursor];
@@ -268,7 +274,7 @@ export const getPostThread = async (params: {
 }): Promise<PostThread> => {
   const { success, data } = await agent.api.app.bsky.feed.getPostThread(params);
   if (!success) {
-    throw new Error("getPostThread failed");
+    throw new AtpError("getPostThread failed");
   }
 
   return data.thread as unknown as PostThread;

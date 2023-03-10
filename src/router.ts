@@ -8,16 +8,7 @@ import PageProfile from "@/pages/PageProfile.vue";
 import PagePost from "@/pages/PageProfile.vue";
 import PageSettings from "@/pages/PageSettings.vue";
 
-import { isMe, tryResumeSession } from "@/lib/atp";
-
-const assumeLogin: RouteRecordRaw["beforeEnter"] = async (to, from, next) => {
-  const { success } = await tryResumeSession();
-  if (success) {
-    next();
-  } else {
-    next({ name: "login" });
-  }
-};
+import { isMe } from "@/lib/atp";
 
 export const router = createRouter({
   history: createWebHashHistory("/skylight/"),
@@ -31,25 +22,21 @@ export const router = createRouter({
       name: "index",
       path: "/",
       component: PageIndex,
-      beforeEnter: assumeLogin,
     },
     {
       name: "notifications",
       path: "/notifications",
       component: PageNoti,
-      beforeEnter: assumeLogin,
     },
     {
       name: "search",
       path: "/search",
       component: PageSearchUser,
-      beforeEnter: assumeLogin,
     },
     {
       name: "my-profile",
       path: "/profile",
       component: PageProfile,
-      beforeEnter: assumeLogin,
     },
     {
       name: "profile",
@@ -57,10 +44,7 @@ export const router = createRouter({
       component: PageProfile,
       props: true,
       beforeEnter: async (to, from, next) => {
-        const { success } = await tryResumeSession();
-        if (!success) {
-          next({ name: "login" });
-        } else if (isMe(to.params.actor as string)) {
+        if (isMe(to.params.actor as string)) {
           next({ name: "my-profile" });
         } else {
           next();
@@ -72,13 +56,11 @@ export const router = createRouter({
       path: "/profile/:actor/post/:rkey",
       component: PagePost,
       props: true,
-      beforeEnter: assumeLogin,
     },
     {
       name: "settings",
       path: "/settings",
       component: PageSettings,
-      beforeEnter: assumeLogin,
     },
   ],
 });

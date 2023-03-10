@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { onActivated } from "vue";
+
 import Loadable from "@/components/common/Loadable.vue";
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import InputPost from "@/components/post/InputPost.vue";
@@ -8,6 +10,10 @@ import ListPosts from "@/components/post/ListPosts.vue";
 
 const { isFetching } = useHomeTimeline();
 const refetch = useHomeTimelineFetch();
+
+onActivated(() => {
+  refetch();
+});
 </script>
 
 <template>
