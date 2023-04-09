@@ -10,6 +10,7 @@ import {
   AppBskyFeedRepost,
   AppBskyGraphFollow,
   AppBskyNotificationListNotifications,
+  AppBskyRichtextFacet,
   AtpAgent,
   AtpSessionData,
 } from "@atproto/api";
@@ -18,6 +19,10 @@ import { AtUri } from "@atproto/uri";
 import { Overwrite } from "./well-typed";
 
 // Re-export app.bsky entity types
+export type Facet = Overwrite<
+  AppBskyRichtextFacet.Main,
+  [["features"], FacetFeature.Any[]]
+>;
 export type Entity = AppBskyFeedPost.Entity;
 export type ProfileView = AppBskyActorDefs.ProfileView;
 export type ProfileViewDetailed = AppBskyActorDefs.ProfileViewDetailed;
@@ -34,6 +39,13 @@ export type ReplyRef = Overwrite<
   [["parent"], PostView],
   [["root"], PostView]
 >;
+export namespace FacetFeature {
+  export type Any = Link | Mention;
+  export type Link = AppBskyRichtextFacet.Link;
+  export const isLink = AppBskyRichtextFacet.isLink;
+  export type Mention = AppBskyRichtextFacet.Mention;
+  export const isMention = AppBskyRichtextFacet.isMention;
+}
 export namespace Record {
   export type Like = AppBskyFeedLike.Record;
   export const isLike = AppBskyFeedLike.isRecord;
@@ -41,8 +53,8 @@ export namespace Record {
   export const isRepost = AppBskyFeedRepost.isRecord;
   export type Follow = AppBskyGraphFollow.Record;
   export const isFollow = AppBskyGraphFollow.isRecord;
-  export type Post = AppBskyFeedPost.Record;
-  export const isPost = AppBskyFeedPost.isRecord;
+  export type Post = Overwrite<AppBskyFeedPost.Record, [["facets"], Facet[]]>;
+  export const isPost = (x: unknown): x is Post => AppBskyFeedPost.isRecord(x);
 }
 export namespace Thread {
   export type Any = Post | NotFoundPost;
@@ -70,7 +82,13 @@ export namespace Embed {
     AppBskyEmbedExternal.isView(x);
   export type Record = Overwrite<
     AppBskyEmbedRecord.View,
-    [["record"], AppBskyEmbedRecord.ViewRecord]
+    [
+      ["record"],
+      Overwrite<
+        AppBskyEmbedRecord.ViewRecord,
+        [["value"], Pick<PostView, "createdAt" | "embed" | "text">]
+      >
+    ]
   >;
   export const isRecord = (x: unknown): x is Record =>
     AppBskyEmbedRecord.isView(x) && AppBskyEmbedRecord.isViewRecord(x.record);

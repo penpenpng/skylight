@@ -9,7 +9,7 @@ import Content from "@/components/post/TilePost/TilePostContent.vue";
 import EmbedExternal from "@/components/post/TilePost/TilePostEmbedExternal.vue";
 import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
 import EmbedRecord from "@/components/post/TilePost/TilePostEmbedRecord.vue";
-import TilePostEmbedRecordNotFound from "@/components/post/TilePost/TilePostEmbedRecordNotFound.vue";
+import EmbedRecordNotFound from "@/components/post/TilePost/TilePostEmbedRecordNotFound.vue";
 import Header from "@/components/post/TilePost/TilePostHeader.vue";
 import RepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
 import { Embed, FeedViewPost, isMe, Reason } from "@/lib/bsky";
@@ -92,7 +92,7 @@ const goToPost = () => {
           :embed="feed.post.embed"
           class="mt-3"
         />
-        <TilePostEmbedRecordNotFound
+        <EmbedRecordNotFound
           v-else-if="Embed.isRecordNotFound(feed.post.embed)"
           :embed="feed.post.embed"
           class="mt-3"

@@ -19,7 +19,7 @@ defineProps({
     </div>
     <div class="card-body text-small pt-1">
       <div class="pre-line wrap-anywhere line-clamp-3">
-        {{ embed.record.text }}
+        {{ embed.record.value.text }}
       </div>
     </div>
   </div>
