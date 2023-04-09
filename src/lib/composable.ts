@@ -20,7 +20,7 @@ export const useOnClickOutside = (
 export const useObjectInspector = (obj: {}) => {
   return {
     printObject: () => {
-      console.log(toRaw(unref(obj)));
+      console.info(toRaw(unref(obj)));
     },
     copyObject: () => {
       navigator.clipboard.writeText(JSON.stringify(toRaw(unref(obj))));

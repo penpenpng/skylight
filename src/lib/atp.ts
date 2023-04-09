@@ -16,6 +16,8 @@ type CursoredResponse<T> = Promise<[data: T, cursor?: string]>;
 
 const getCreatedAt = () => new Date().toISOString();
 
+export const getMyHandle = () => self?.handle || "";
+
 export const isMe = (actor: string) =>
   actor === self?.did || actor === self?.handle;
 
@@ -256,28 +258,19 @@ export const upvote = async (params: { uri: string; cid: string }) =>
     }
   );
 
-export const getPost = async (params: {
-  uri: string;
-}): Promise<Post | null> => {
-  const thread = await getPostThread({ ...params, depth: 0 });
-
-  if (!thread.notFound) {
-    return thread.post;
-  } else {
-    return null;
-  }
-};
-
 export const getPostThread = async (params: {
   uri: string;
   depth?: number;
-}): Promise<PostThread> => {
-  const { success, data } = await agent.api.app.bsky.feed.getPostThread(params);
+}): Promise<PostThread.Any> => {
+  const { success, data } = await agent.api.app.bsky.feed.getPostThread({
+    ...params,
+    depth: params.depth ?? 0,
+  });
   if (!success) {
     throw new AtpError("getPostThread failed");
   }
 
-  return data.thread as unknown as PostThread;
+  return data.thread as PostThread.Any;
 };
 
 export const updateHandle = async (params: { handle: string }) =>
@@ -480,17 +473,23 @@ export interface ReplyRef {
   };
 }
 
-export type PostThread =
-  | {
-      notFound: undefined; // Not actually present, but for convenience.
-      post: Post;
-      parent?: PostThread;
-      replies?: PostThread[];
-    }
-  | {
-      notFound: true;
-      uri: string;
-    };
+export namespace PostThread {
+  export type Any = Found | NotFound;
+
+  export const isFound = (thread: Any): thread is Found => "post" in thread;
+  export interface Found {
+    post: Post;
+    parent?: PostThread.Any;
+    replies?: PostThread.Any[];
+  }
+
+  export const isNotFound = (thread: Any): thread is NotFound =>
+    !("post" in thread);
+  export interface NotFound {
+    notFound: true;
+    uri: string;
+  }
+}
 
 type NotificationOf<K, R> = {
   uri: string;

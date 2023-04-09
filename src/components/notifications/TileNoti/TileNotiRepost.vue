@@ -14,7 +14,7 @@ const props = defineProps({
   },
 });
 
-const { data: post } = await usePost(props.noti.record.subject.uri);
+const { data: post } = await usePost({ uri: props.noti.record.subject.uri });
 </script>
 
 <template>

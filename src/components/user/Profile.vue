@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, Ref } from "vue";
+import { reactive } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Loadable from "@/components/common/Loadable.vue";
@@ -9,7 +9,6 @@ import ProfileTab from "@/components/user/ProfileTab.vue";
 import ButtonFollow from "@/components/user/ButtonFollow.vue";
 import ListPosts from "@/components/post/ListPosts.vue";
 
-import { useSettings } from "@/lib/settings";
 import { useActorProfile } from "@/lib/query";
 import { ActorProfile } from "@/lib/atp";
 import { useObjectInspector } from "@/lib/composable";
@@ -19,12 +18,11 @@ import defaultHero from "@/assets/default-hero.jpg?url";
 const props = defineProps({
   actor: {
     type: String,
+    required: true,
   },
 });
 
-const { data: _user, suspense } = useActorProfile(props.actor);
-await suspense();
-const user = _user as Ref<ActorProfile>; // TODO: ちょっとどうかと思う
+const { data: user } = await useActorProfile(props.actor);
 
 interface State {
   tab: string;

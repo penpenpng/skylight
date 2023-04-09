@@ -13,9 +13,10 @@ const props = defineProps({
   },
 });
 
-const { data: feeds, suspense } =
-  props.kind == "home" ? useHomeTimeline() : useAuthorFeed(props.actor);
-await suspense();
+const { data: feeds } =
+  props.kind == "home"
+    ? await useHomeTimeline()
+    : await useAuthorFeed(props.actor);
 </script>
 
 <template>

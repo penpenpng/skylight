@@ -15,11 +15,10 @@ const props = defineProps({
   },
 });
 
-const { data: friends, suspense } =
+const { data: friends } =
   props.kind === "follows"
-    ? useFollows(props.actor)
-    : useFollowers(props.actor);
-await suspense();
+    ? await useFollows(props.actor)
+    : await useFollowers(props.actor);
 </script>
 
 <template>

@@ -7,6 +7,7 @@ import Profile from "@/components/user/Profile.vue";
 defineProps({
   actor: {
     type: String,
+    required: true,
   },
 });
 

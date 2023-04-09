@@ -2,8 +2,7 @@
 import { useNotifications } from "@/lib/query";
 import TileNoti from "./TileNoti.vue";
 
-const { data: notifications, suspense } = useNotifications();
-await suspense();
+const { data: notifications } = await useNotifications();
 </script>
 
 <template>

@@ -1,19 +1,12 @@
 <script setup lang="ts">
-import { onActivated } from "vue";
-
 import Loadable from "@/components/common/Loadable.vue";
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import InputPost from "@/components/post/InputPost.vue";
 
-import { useHomeTimelineFetch, useHomeTimeline } from "@/lib/query";
+import { useFetchButton, QueryKeys } from "@/lib/query";
 import ListPosts from "@/components/post/ListPosts.vue";
 
-const { isFetching } = useHomeTimeline();
-const refetch = useHomeTimelineFetch();
-
-onActivated(() => {
-  refetch();
-});
+const { invalidate, isFetching } = useFetchButton(QueryKeys.homeTimeline());
 </script>
 
 <template>
@@ -22,7 +15,7 @@ onActivated(() => {
   <div class="columns col-oneline p-2">
     <ButtonAsync
       class="btn btn-secondary col-ml-auto"
-      :onClick="refetch"
+      :onClick="invalidate"
       :forceLoading="isFetching"
     >
       Refresh

@@ -1,28 +1,14 @@
 import { createApp } from "vue";
-import { VueQueryPlugin } from "vue-query";
+import { VueQueryPlugin } from "@tanstack/vue-query";
 import "spectre.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 
 import App from "@/App.vue";
 import { router } from "@/router";
-import { tryResumeSession } from "./lib/atp";
+import { tryResumeSession } from "@/lib/atp";
+import { queryClient } from "@/lib/query";
 
-createApp(App)
-  .use(VueQueryPlugin, {
-    queryClientConfig: {
-      defaultOptions: {
-        queries: {
-          refetchOnWindowFocus: false,
-          suspense: true,
-          keepPreviousData: true,
-          staleTime: Infinity,
-          cacheTime: Infinity,
-        },
-      },
-    },
-  })
-  .use(router)
-  .mount("#app");
+createApp(App).use(VueQueryPlugin, { queryClient }).use(router).mount("#app");
 
 tryResumeSession().then(({ success }) => {
   if (!success) {

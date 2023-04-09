@@ -12,7 +12,7 @@ defineProps({
 
 <template>
   <div class="tile-post-action-button d-inline-flex">
-    <button class="btn btn-link btn-icon mr-1" @click="$emit('click')">
+    <button class="btn btn-link btn-icon mr-1" @click.stop="$emit('click')">
       <i :class="iconClass" :aria-label="ariaLabel"></i>
     </button>
     <slot />

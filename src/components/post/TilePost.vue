@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PropType, computed } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Dropdown from "@/components/common/Dropdown.vue";
@@ -12,20 +12,20 @@ import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
 import EmbedExternal from "@/components/post/TilePost/TilePostEmbedExternal.vue";
 import EmbedRecord from "@/components/post/TilePost/TilePostEmbedRecord.vue";
 
-import { Embed, Feed, isMe, deletePost } from "@/lib/atp";
+import { Embed, Feed, isMe, parseUri } from "@/lib/atp";
 import { useObjectInspector } from "@/lib/composable";
-import { useAuthorFeedFetch, useHomeTimelineFetch } from "@/lib/query";
+import { useDeletePostMutation } from "@/lib/query";
 
 const props = defineProps({
   feed: { type: Object as PropType<Feed>, required: true },
 });
 
 const { printObject, copyObject } = useObjectInspector(props.feed);
-const refetchAuthorFeed = useAuthorFeedFetch();
-const refetchHomeTimeline = useHomeTimelineFetch();
+const { mutate: deletePost } = useDeletePostMutation();
 
 const post = computed(() => props.feed.post);
 const route = useRoute();
+const router = useRouter();
 
 const menu = computed(() => {
   const keys: string[] = [];
@@ -42,20 +42,24 @@ const menu = computed(() => {
   return keys;
 });
 
-const deletePostAndRefetch = async () => {
-  await deletePost({ uri: props.feed.post.uri });
-  if (route.name === "my-profile") {
-    refetchAuthorFeed();
-  } else if (route.name === "index") {
-    refetchHomeTimeline();
-  }
+const goToPost = () => {
+  router.push({
+    name: "post-uri-resolver",
+    params: {
+      uri: props.feed.post.uri,
+    },
+  });
 };
 </script>
 
 <template>
   <div class="tile-post hoverable">
     <RepostChip v-if="feed.reason?.by" :reposted-by="feed.reason?.by" />
-    <article class="tile" :class="{ 'pl-2': feed.reason?.by }">
+    <article
+      class="tile c-hand"
+      :class="{ 'pl-2': feed.reason?.by }"
+      @click="goToPost"
+    >
       <div class="tile-icon">
         <Avatar
           :src="post.author.avatar"
@@ -94,9 +98,10 @@ const deletePostAndRefetch = async () => {
         <Dropdown
           :keys="menu"
           right
-          @delete-post="deletePostAndRefetch"
+          @delete-post="() => deletePost({ uri: feed.post.uri })"
           @print-object="printObject"
           @copy-object="copyObject"
+          @click.stop
         >
           <template #delete-post>Delete Post</template>
           <template #print-object>Print Object</template>

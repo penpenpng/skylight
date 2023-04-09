@@ -29,17 +29,19 @@ const onClickThumb = (index: number) => {
       :src="thumb"
       :alt="alt"
       class="c-hand image-thumb"
-      @click="onClickThumb(idx)"
+      @click.stop="onClickThumb(idx)"
     />
-    <FsLightbox
-      type="image"
-      disableLocalStorage
-      exitFullscreenOnClose
-      :toggler="toggler"
-      :sources="props.embed.images.map((e) => e.fullsize)"
-      :customAttributes="props.embed.images.map((e) => ({ alt: e.alt }))"
-      :slide="slide"
-    />
+    <Teleport to="#lightbox">
+      <FsLightbox
+        type="image"
+        disableLocalStorage
+        exitFullscreenOnClose
+        :toggler="toggler"
+        :sources="props.embed.images.map((e) => e.fullsize)"
+        :customAttributes="props.embed.images.map((e) => ({ alt: e.alt }))"
+        :slide="slide"
+      />
+    </Teleport>
   </div>
 </template>
 
