@@ -44,12 +44,13 @@ const menu = computed(() => {
 });
 
 const goToPost = () => {
-  router.push({
-    name: "post-uri-resolver",
-    params: {
-      uri: props.feed.post.uri,
-    },
-  });
+  // NOTE: Not implemented
+  // router.push({
+  //   name: "post-uri-resolver",
+  //   params: {
+  //     uri: props.feed.post.uri,
+  //   },
+  // });
 };
 </script>
 

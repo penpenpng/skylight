@@ -55,7 +55,12 @@ export namespace Thread {
   export const isNotFoundPost = AppBskyFeedDefs.isNotFoundPost;
 }
 export namespace Embed {
-  export type Any = Image | External | Record | RecordWithMedia;
+  export type Any =
+    | Image
+    | External
+    | Record
+    | RecordNotFound
+    | RecordWithMedia;
   export type Image = AppBskyEmbedImages.View;
   export const isImage = (x: unknown): x is Image =>
     AppBskyEmbedImages.isView(x);

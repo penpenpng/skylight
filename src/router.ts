@@ -51,26 +51,27 @@ export const router = createRouter({
         next();
       },
     },
-    {
-      name: "post",
-      path: "/profile/:actor/post/:rkey",
-      component: PagePost,
-      props: true,
-      beforeEnter: async (to, from, next) => {
-        const actor = to.params.actor as string;
+    // NOTE: Not implemented
+    // {
+    //   name: "post",
+    //   path: "/profile/:actor/post/:rkey",
+    //   component: PagePost,
+    //   props: true,
+    //   beforeEnter: async (to, from, next) => {
+    //     const actor = to.params.actor as string;
 
-        if (actor.startsWith("did:")) {
-          const handle = await resolveDidToHandleForNavigationGuard(actor);
-          next({
-            name: "post",
-            params: { actor: handle, rkey: to.params.rkey },
-          });
-          return;
-        }
+    //     if (actor.startsWith("did:")) {
+    //       const handle = await resolveDidToHandleForNavigationGuard(actor);
+    //       next({
+    //         name: "post",
+    //         params: { actor: handle, rkey: to.params.rkey },
+    //       });
+    //       return;
+    //     }
 
-        next();
-      },
-    },
+    //     next();
+    //   },
+    // },
     {
       name: "settings",
       path: "/settings",
@@ -86,21 +87,22 @@ export const router = createRouter({
         },
       }),
     },
-    {
-      name: "post-uri-resolver",
-      path: "/post/:uri",
-      redirect: (to) => {
-        const uri = to.params.uri as string;
-        const { did, rkey } = parseUri(uri);
+    // NOTE: Not implemented
+    // {
+    //   name: "post-uri-resolver",
+    //   path: "/post/:uri",
+    //   redirect: (to) => {
+    //     const uri = to.params.uri as string;
+    //     const { did, rkey } = parseUri(uri);
 
-        return {
-          name: "post",
-          params: {
-            actor: did,
-            rkey,
-          },
-        };
-      },
-    },
+    //     return {
+    //       name: "post",
+    //       params: {
+    //         actor: did,
+    //         rkey,
+    //       },
+    //     };
+    //   },
+    // },
   ],
 });
