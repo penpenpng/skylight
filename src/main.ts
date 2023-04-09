@@ -5,7 +5,7 @@ import "bootstrap-icons/font/bootstrap-icons.css";
 
 import App from "@/App.vue";
 import { router } from "@/router";
-import { tryResumeSession } from "@/lib/atp";
+import { tryResumeSession } from "@/lib/bsky";
 import { queryClient } from "@/lib/query";
 
 createApp(App).use(VueQueryPlugin, { queryClient }).use(router).mount("#app");

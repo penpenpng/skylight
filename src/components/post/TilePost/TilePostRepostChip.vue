@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 import Username from "@/components/common/Username.vue";
-import { Actor } from "@/lib/atp";
+import { ProfileView } from "@/lib/bsky";
 
 defineProps({
   repostedBy: {
-    type: Object as PropType<Actor>,
+    type: Object as PropType<ProfileView>,
     required: true,
   },
 });

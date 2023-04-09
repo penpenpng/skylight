@@ -2,6 +2,7 @@
 import { PropType } from "vue";
 import TilePost from "@/components/post/TilePost.vue";
 import { useAuthorFeed, useHomeTimeline } from "@/lib/query";
+import { Reason } from "@/lib/bsky";
 
 const props = defineProps({
   kind: {
@@ -23,6 +24,6 @@ const { data: feeds } =
   <TilePost
     v-for="feed in feeds"
     :feed="feed"
-    :key="feed.post.uri + (`+${feed.reason?.by.handle}` || '')"
+    :key="feed.post.uri + `+${Reason.getRepost(feed.reason)?.by.handle}`"
   />
 </template>

@@ -1,27 +1,30 @@
 <script setup lang="ts">
 import { ref, PropType } from "vue";
 
-import { Actor, ActorDetail, followUser } from "@/lib/atp";
+import {
+  ProfileView,
+  ProfileViewDetailed,
+  follow as _follow,
+} from "@/lib/bsky";
 import { useUnfollowMutation } from "@/lib/query";
 
 const props = defineProps({
   user: {
-    type: Object as PropType<ActorDetail | Actor>,
+    type: Object as PropType<ProfileView | ProfileViewDetailed>,
     required: true,
   },
 });
 
 // Cannot useMutation return value?
 // const { mutate: followUser } = useFollowMutation();
-const { mutate: unfollowUser } = useUnfollowMutation();
+const { mutate: _unfollow } = useUnfollowMutation();
 const updatedFollowing = ref(false);
 const followingUri = ref(props.user.viewer?.following);
 
 const follow = async () => {
   try {
-    const { uri } = await followUser({
+    const { uri } = await _follow({
       did: props.user.did,
-      cid: props.user.declaration.cid,
     });
     followingUri.value = uri;
     updatedFollowing.value = !updatedFollowing.value;
@@ -33,7 +36,7 @@ const follow = async () => {
 const unfollow = async () => {
   try {
     if (followingUri.value) {
-      await unfollowUser({
+      await _unfollow({
         uri: followingUri.value,
       });
       updatedFollowing.value = !updatedFollowing.value;

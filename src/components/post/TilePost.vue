@@ -11,13 +11,14 @@ import Actions from "@/components/post/TilePost/TilePostActions.vue";
 import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
 import EmbedExternal from "@/components/post/TilePost/TilePostEmbedExternal.vue";
 import EmbedRecord from "@/components/post/TilePost/TilePostEmbedRecord.vue";
+import TilePostEmbedRecordNotFound from "@/components/post/TilePost/TilePostEmbedRecordNotFound.vue";
 
-import { Embed, Feed, isMe, parseUri } from "@/lib/atp";
+import { FeedViewPost, isMe, Embed, Reason } from "@/lib/bsky";
 import { useObjectInspector } from "@/lib/composable";
 import { useDeletePostMutation } from "@/lib/query";
 
 const props = defineProps({
-  feed: { type: Object as PropType<Feed>, required: true },
+  feed: { type: Object as PropType<FeedViewPost>, required: true },
 });
 
 const { printObject, copyObject } = useObjectInspector(props.feed);
@@ -54,7 +55,10 @@ const goToPost = () => {
 
 <template>
   <div class="tile-post hoverable">
-    <RepostChip v-if="feed.reason?.by" :reposted-by="feed.reason?.by" />
+    <RepostChip
+      v-if="Reason.isRepost(feed.reason)"
+      :reposted-by="feed.reason.by"
+    />
     <article
       class="tile c-hand"
       :class="{ 'pl-2': feed.reason?.by }"
@@ -67,9 +71,9 @@ const goToPost = () => {
           :display-name="post.author.displayName"
         />
       </div>
-      <div class="tile-content">
+      <div class="tile-content" @click.stop>
         <div class="tile-title">
-          <Header :post="feed.post" />
+          <Header :feed="feed" />
         </div>
         <div class="tile-subtitle">
           <Content :feed="feed" />
@@ -85,10 +89,12 @@ const goToPost = () => {
           class="mt-3"
         />
         <EmbedRecord
-          v-else-if="
-            Embed.isRecord(feed.post.embed) ||
-            Embed.isRecordNotFound(feed.post.embed)
-          "
+          v-else-if="Embed.isRecord(feed.post.embed)"
+          :embed="feed.post.embed"
+          class="mt-3"
+        />
+        <TilePostEmbedRecordNotFound
+          v-else-if="Embed.isRecordNotFound(feed.post.embed)"
           :embed="feed.post.embed"
           class="mt-3"
         />

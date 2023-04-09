@@ -8,7 +8,7 @@ import PageProfile from "@/pages/PageProfile.vue";
 import PagePost from "@/pages/PagePost.vue";
 import PageSettings from "@/pages/PageSettings.vue";
 
-import { getMyHandle, isMe, parseUri } from "@/lib/atp";
+import { getMyHandle, parseUri } from "@/lib/bsky";
 import { resolveDidToHandleForNavigationGuard } from "./lib/query";
 
 export const router = createRouter({

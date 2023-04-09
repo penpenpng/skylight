@@ -4,17 +4,17 @@ import twtext from "twitter-text";
 
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
 
-import { ReplyRef } from "@/lib/atp";
 import { smartMerge, debounce } from "@/lib/algorithm";
 import { usePostMutation } from "@/lib/query";
+import { FeedViewPost } from "@/lib/bsky";
 
 const emits = defineEmits<{
   (ev: "success"): void;
   (ev: "error"): void;
 }>();
 const props = defineProps({
-  replay: {
-    type: Object as PropType<ReplyRef>,
+  replyTo: {
+    type: Object as PropType<FeedViewPost>,
   },
 });
 
@@ -69,7 +69,7 @@ const submit = async () => {
   state.urls = [];
 
   try {
-    await postText({ text, urls, reply: props?.replay });
+    await postText({ text, urls, replyTo: props.replyTo });
     emits("success");
   } catch {
     emits("error");

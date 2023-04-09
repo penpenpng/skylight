@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { PropType } from "vue";
 
-import { Embed } from "@/lib/atp";
+import { Embed } from "@/lib/bsky";
 
 const props = defineProps({
   embed: {

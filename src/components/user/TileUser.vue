@@ -5,11 +5,11 @@ import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
 import ButtonFollow from "@/components/user/ButtonFollow.vue";
 
-import { Actor, ActorDetail } from "@/lib/atp";
+import { ProfileView, ProfileViewDetailed } from "@/lib/bsky";
 
 defineProps({
   user: {
-    type: Object as PropType<ActorDetail | Actor>,
+    type: Object as PropType<ProfileView | ProfileViewDetailed>,
     required: true,
   },
 });

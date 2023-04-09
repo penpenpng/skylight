@@ -9,20 +9,21 @@ import {
 } from "@tanstack/vue-query";
 
 import {
-  unfollowUser,
+  unfollow,
   getAuthorFeed,
   getFollowers,
   getFollows,
-  getPostThread,
+  getThread,
   getProfile,
   getTimeline,
   deletePost,
   postText,
   repost,
-  upvote,
+  like,
   getNotifications,
-  ActorProfile,
-} from "@/lib/atp";
+  ProfileViewDetailed,
+  getPost,
+} from "@/lib/bsky";
 import { computed, onActivated, Ref } from "vue";
 import { Overwrite } from "./well-typed";
 
@@ -93,7 +94,10 @@ const useSuspenseQuery = async <T>(
   queryFn: () => Promise<T>,
   options?: QueryOptions
 ): Promise<
-  Omit<Overwrite<UseQueryReturnType<T, unknown>, { data: Ref<T> }>, "suspense">
+  Omit<
+    Overwrite<UseQueryReturnType<T, unknown>, [["data"], Ref<T>]>,
+    "suspense"
+  >
 > => {
   const result = useAdaptiveQuery(queryKey, queryFn, options);
   await result.suspense();
@@ -187,13 +191,11 @@ export const usePost = async (
   params: { uri: string } | { handle: string; rkey: string },
   options?: QueryOptions
 ) => {
-  const DEPTH = 2;
-
   if ("uri" in params) {
     const uri = params.uri;
     return useSuspenseQuery(
       QueryKeys.post(uri),
-      () => getPostThread({ uri, depth: DEPTH }),
+      () => getPost({ uri }),
       options
     );
   } else {
@@ -209,7 +211,7 @@ export const usePost = async (
 
     return useSuspenseQuery(
       QueryKeys.post(uri),
-      () => getPostThread({ uri: uri.value as string, depth: DEPTH }),
+      () => getPost({ uri: uri.value as string }),
       {
         enabled: uriReady,
       }
@@ -250,10 +252,10 @@ export const useRepostMutation = () => {
 };
 
 // TODO: optimisitc mutation
-export const useUpvoteMutation = () => {
+export const useLikeMutation = () => {
   const client = useQueryClient();
   // TODO: upvote されたポストも
-  return useMutation(upvote, {
+  return useMutation(like, {
     onSuccess: () => {
       client.invalidateQueries(QueryKeys.homeTimeline());
       client.invalidateQueries(QueryKeys.authorFeed());
@@ -268,11 +270,11 @@ export const useUpvoteMutation = () => {
 
 // TODO: optimisitc mutation
 export const useUnfollowMutation = () => {
-  return useMutation(unfollowUser);
+  return useMutation(unfollow);
 };
 
 export const resolveDidToHandleForNavigationGuard = async (did: string) => {
-  const profile: ActorProfile =
+  const profile: ProfileViewDetailed =
     queryClient.getQueryData(QueryKeys.actorProfile(did)) ??
     (await queryClient.fetchQuery(QueryKeys.actorProfile(did), () =>
       getProfile({ actor: did })

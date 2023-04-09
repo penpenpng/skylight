@@ -23,7 +23,7 @@ const { data: friends } =
 
 <template>
   <TileUser
-    v-for="friend in friends?.users"
+    v-for="friend in friends"
     :user="friend"
     :key="friend.handle"
     class="py-2 my-2"

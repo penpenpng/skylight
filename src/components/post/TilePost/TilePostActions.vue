@@ -3,28 +3,19 @@ import { ref, PropType, computed } from "vue";
 import InputPost from "@/components/post/InputPost.vue";
 import TilePostActionButton from "@/components/post/TilePost/TilePostActionButton.vue";
 
-import { useRepostMutation, useUpvoteMutation } from "@/lib/query";
-import { Feed } from "@/lib/atp";
+import { useRepostMutation, useLikeMutation } from "@/lib/query";
+import { FeedViewPost } from "@/lib/bsky";
 
 const props = defineProps({
-  feed: { type: Object as PropType<Feed>, required: true },
+  feed: { type: Object as PropType<FeedViewPost>, required: true },
 });
 
 const { mutate: repost } = useRepostMutation();
-const { mutate: upvote } = useUpvoteMutation();
+const { mutate: upvote } = useLikeMutation();
 
 const expandedInput = ref(false);
 
 const post = computed(() => props.feed.post);
-const replyTarget = computed(() => {
-  const parent = {
-    cid: props.feed.post.cid,
-    uri: props.feed.post.uri,
-  };
-  const root = props.feed.reply?.root || parent;
-
-  return { parent, root };
-});
 </script>
 
 <template>
@@ -64,7 +55,7 @@ const replyTarget = computed(() => {
   <div v-if="expandedInput" class="d-flex">
     <InputPost
       class="column"
-      :replay="replyTarget"
+      :reply-to="feed"
       @success="expandedInput = false"
     />
     <button

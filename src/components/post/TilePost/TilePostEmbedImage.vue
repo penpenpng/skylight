@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { PropType, ref } from "vue";
-import { Embed } from "@/lib/atp";
+import { Embed } from "@/lib/bsky";
 import _FsLightbox from "fslightbox-vue/v3.js";
 
 // https://github.com/banthagroup/fslightbox-vue/issues/67
 const FsLightbox = _FsLightbox.default || _FsLightbox;
 
-const props = defineProps({
+defineProps({
   embed: {
     type: Object as PropType<Embed.Image>,
     required: true,
@@ -37,8 +37,8 @@ const onClickThumb = (index: number) => {
         disableLocalStorage
         exitFullscreenOnClose
         :toggler="toggler"
-        :sources="props.embed.images.map((e) => e.fullsize)"
-        :customAttributes="props.embed.images.map((e) => ({ alt: e.alt }))"
+        :sources="embed.images.map((e) => e.fullsize)"
+        :customAttributes="embed.images.map((e) => ({ alt: e.alt }))"
         :slide="slide"
       />
     </Teleport>

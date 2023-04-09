@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { createSession } from "@/lib/atp";
+import { createSession } from "@/lib/bsky";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 

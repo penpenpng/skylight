@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import { PropType } from "vue";
-import { Notification } from "@/lib/atp";
+import { Notification } from "@/lib/bskyy";
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
 
-import TileNotiVote from "./TileNoti/TileNotiVote.vue";
+import TileNotiLike from "./TileNoti/TileNotiLike.vue";
 import TileNotiRepost from "./TileNoti/TileNotiRepost.vue";
 
-const props = defineProps({
+defineProps({
   noti: {
-    type: Object as PropType<Notification>,
+    type: Object as PropType<Notification.Any>,
     required: true,
   },
 });
 </script>
 
 <template>
-  <TileNotiVote v-if="noti.reason === 'vote'" :noti="noti" />
+  <TileNotiLike v-if="noti.reason === 'like'" :noti="noti" />
   <TileNotiRepost v-else-if="noti.reason === 'repost'" :noti="noti" />
   <article
     v-else-if="noti.reason === 'mention' || noti.reason === 'reply'"

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
-import { getProfile, tryResumeSession, updateHandle } from "@/lib/atp";
+import { getProfile, tryResumeSession, updateHandle } from "@/lib/bsky";
 import { shallowRef, ref } from "vue";
 
 const emits = defineEmits<{

@@ -3,10 +3,10 @@ import { PropType, computed } from "vue";
 
 import Username from "@/components/common/Username.vue";
 
-import { Feed, Entity } from "@/lib/atp";
+import { FeedViewPost, Entity } from "@/lib/bsky";
 
 const props = defineProps({
-  feed: { type: Object as PropType<Feed>, required: true },
+  feed: { type: Object as PropType<FeedViewPost>, required: true },
 });
 
 const post = computed(() => props.feed.post);
@@ -27,7 +27,7 @@ const getElements = (text: string, entities: Entity[]) => {
       text: text.slice(idx, e.index.start),
     });
     arr.push({
-      type: e.type,
+      type: e.type as "link" | "mention" /* FIXME */,
       text: text.slice(e.index.start, e.index.end),
       href: e.value,
     });

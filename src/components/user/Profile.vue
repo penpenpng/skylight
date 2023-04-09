@@ -10,7 +10,6 @@ import ButtonFollow from "@/components/user/ButtonFollow.vue";
 import ListPosts from "@/components/post/ListPosts.vue";
 
 import { useActorProfile } from "@/lib/query";
-import { ActorProfile } from "@/lib/atp";
 import { useObjectInspector } from "@/lib/composable";
 
 import defaultHero from "@/assets/default-hero.jpg?url";
