@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PropType } from "vue";
+
 import Username from "@/components/common/Username.vue";
 import { ProfileView } from "@/lib/bsky";
 

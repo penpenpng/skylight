@@ -3,7 +3,6 @@ import { PropType } from "vue";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
-
 import { Notification } from "@/lib/bsky";
 import { usePost } from "@/lib/query";
 

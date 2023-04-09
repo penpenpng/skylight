@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { ref, onErrorCaptured } from "vue";
+import { onErrorCaptured, ref } from "vue";
 
 import Loadable from "@/components/common/Loadable.vue";
-import Profile from "@/components/user/Profile.vue";
+import ActorProfile from "@/components/user/ActorProfile.vue";
 
 defineProps({
   actor: {
@@ -26,7 +26,7 @@ onErrorCaptured(() => {
 
   <div v-else style="margin-top: 30px">
     <Loadable>
-      <Profile :actor="actor" />
+      <ActorProfile :actor="actor" />
     </Loadable>
   </div>
 </template>

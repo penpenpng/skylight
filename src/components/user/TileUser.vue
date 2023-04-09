@@ -4,7 +4,6 @@ import { PropType } from "vue";
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
 import ButtonFollow from "@/components/user/ButtonFollow.vue";
-
 import { ProfileView, ProfileViewDetailed } from "@/lib/bsky";
 
 defineProps({

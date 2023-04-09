@@ -2,12 +2,12 @@
 import { PropType } from "vue";
 
 import TileUser from "@/components/user/TileUser.vue";
-
 import { useFollowers, useFollows } from "@/lib/query";
 
 const props = defineProps({
   actor: {
     type: String,
+    default: undefined,
   },
   kind: {
     type: String as PropType<"follows" | "followers">,
@@ -24,8 +24,8 @@ const { data: friends } =
 <template>
   <TileUser
     v-for="friend in friends"
-    :user="friend"
     :key="friend.handle"
+    :user="friend"
     class="py-2 my-2"
   />
 </template>

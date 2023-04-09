@@ -4,6 +4,7 @@ import { ref } from "vue";
 const props = defineProps({
   onClick: {
     type: Function,
+    default: undefined,
   },
   forceLoading: {
     type: Boolean,

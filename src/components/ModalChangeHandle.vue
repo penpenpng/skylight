@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import { ref, shallowRef } from "vue";
+
 import ButtonAsync from "@/components/common/ButtonAsync.vue";
 import { getProfile, tryResumeSession, updateHandle } from "@/lib/bsky";
-import { shallowRef, ref } from "vue";
 
 const emits = defineEmits<{
   (ev: "close"): void;
@@ -22,6 +23,7 @@ const verifyHandle = async () => {
     await updateHandle({ handle: text });
     await tryResumeSession();
     close();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (error: any) {
     console.error(error);
     if (error?.message === "Internal Server Error") {
@@ -83,7 +85,7 @@ const verifyHandle = async () => {
       <div class="modal-footer">
         <ButtonAsync
           class="btn btn-primary"
-          :onClick="verifyHandle"
+          :on-click="verifyHandle"
           :disabled="!handleText || user.handle === handleText"
         >
           Verify

@@ -1,19 +1,20 @@
 import {
+  AppBskyActorDefs,
   AppBskyEmbedExternal,
   AppBskyEmbedImages,
   AppBskyEmbedRecord,
   AppBskyEmbedRecordWithMedia,
-  AtpAgent,
-  AtpSessionData,
+  AppBskyFeedDefs,
   AppBskyFeedLike,
+  AppBskyFeedPost,
   AppBskyFeedRepost,
   AppBskyGraphFollow,
-  AppBskyFeedDefs,
-  AppBskyActorDefs,
-  AppBskyFeedPost,
   AppBskyNotificationListNotifications,
+  AtpAgent,
+  AtpSessionData,
 } from "@atproto/api";
 import { AtUri } from "@atproto/uri";
+
 import { Overwrite } from "./well-typed";
 
 // Re-export app.bsky entity types

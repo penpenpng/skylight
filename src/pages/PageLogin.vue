@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { createSession } from "@/lib/bsky";
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+
+import { createSession } from "@/lib/bsky";
 
 const router = useRouter();
 const state = reactive({
@@ -24,16 +25,16 @@ const login = async () => {
 <template>
   <p>Minimal Bluesky Client for bsky.social</p>
 
-  <form @submit.prevent="login" :class="{ 'has-error': state.hasError }">
+  <form :class="{ 'has-error': state.hasError }" @submit.prevent="login">
     <div class="form-group">
       <label class="form-label" for="identifier"
         >Identifier (email or handle)</label
       >
       <input
+        id="identifier"
         v-model="state.identifier"
         class="form-input"
         type="text"
-        id="identifier"
         @input="state.hasError = false"
       />
     </div>
@@ -41,10 +42,10 @@ const login = async () => {
     <div class="form-group">
       <label class="form-label" for="password">Password</label>
       <input
+        id="password"
         v-model="state.password"
         class="form-input"
         type="password"
-        id="password"
         @input="state.hasError = false"
       />
     </div>

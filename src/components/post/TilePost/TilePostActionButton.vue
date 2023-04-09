@@ -3,9 +3,11 @@ defineEmits<{ (ev: "click"): void }>();
 defineProps({
   ariaLabel: {
     type: String,
+    default: undefined,
   },
   iconClass: {
     type: String,
+    default: undefined,
   },
 });
 </script>

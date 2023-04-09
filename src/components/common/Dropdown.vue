@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { ref, PropType } from "vue";
+import { PropType,ref } from "vue";
+
 import { useOnClickOutside } from "@/lib/composable";
 
 const emit = defineEmits<{ (key: string): void }>();

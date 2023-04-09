@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, PropType } from "vue";
+import { PropType,ref } from "vue";
 
 import {
+  follow as _follow,
   ProfileView,
   ProfileViewDetailed,
-  follow as _follow,
 } from "@/lib/bsky";
 import { useUnfollowMutation } from "@/lib/query";
 

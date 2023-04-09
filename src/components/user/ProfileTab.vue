@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { PropType } from "vue";
+
 import { ProfileView } from "@/lib/bsky";
 
 defineEmits<{ (ev: "switch", tab: string): void }>();
 defineProps({
   tab: {
     type: String,
+    required: true,
   },
   user: {
     type: Object as PropType<ProfileView>,

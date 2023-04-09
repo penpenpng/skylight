@@ -1,14 +1,13 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 
-import PageLogin from "@/pages/PageLogin.vue";
+import { getMyHandle } from "@/lib/bsky";
 import PageIndex from "@/pages/PageIndex.vue";
+import PageLogin from "@/pages/PageLogin.vue";
 import PageNoti from "@/pages/PageNoti.vue";
-import PageSearchUser from "@/pages/PageSearchUser.vue";
 import PageProfile from "@/pages/PageProfile.vue";
-import PagePost from "@/pages/PagePost.vue";
+import PageSearchUser from "@/pages/PageSearchUser.vue";
 import PageSettings from "@/pages/PageSettings.vue";
 
-import { getMyHandle, parseUri } from "@/lib/bsky";
 import { resolveDidToHandleForNavigationGuard } from "./lib/query";
 
 export const router = createRouter({

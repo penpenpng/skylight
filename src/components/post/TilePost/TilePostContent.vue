@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { PropType, computed } from "vue";
+import { computed, PropType } from "vue";
 
 import Username from "@/components/common/Username.vue";
-
-import { FeedViewPost, Entity } from "@/lib/bsky";
+import { Entity, FeedViewPost } from "@/lib/bsky";
 
 const props = defineProps({
   feed: { type: Object as PropType<FeedViewPost>, required: true },
@@ -53,14 +52,20 @@ const getElements = (text: string, entities: Entity[]) => {
         post.record.text,
         post.record.entities || []
       )"
-      ><span v-if="e.type === 'text'" :key="idx">{{ e.text }}</span
+      ><span v-if="e.type === 'text'" :key="`text-${idx}`">{{ e.text }}</span
       ><RouterLink
         v-else-if="e.type === 'mention'"
+        :key="`mention-${idx}`"
         :to="{ name: 'profile', params: { actor: e.href } }"
         >{{ e.text }}</RouterLink
-      ><a v-else :href="e.href" target="_blank" class="line-clamp-1">{{
-        e.text
-      }}</a>
+      ><a
+        v-else
+        :key="`link-${idx}`"
+        :href="e.href"
+        target="_blank"
+        class="line-clamp-1"
+        >{{ e.text }}</a
+      >
     </template>
   </div>
 </template>

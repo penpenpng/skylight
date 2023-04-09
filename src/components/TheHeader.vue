@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from "vue-router";
+
 import { deleteSession } from "@/lib/bsky";
 
 const route = useRoute();

@@ -1,18 +1,16 @@
 <script setup lang="ts">
 import { reactive } from "vue";
 
+import defaultHero from "@/assets/default-hero.jpg?url";
 import Avatar from "@/components/common/Avatar.vue";
-import Loadable from "@/components/common/Loadable.vue";
 import Dropdown from "@/components/common/Dropdown.vue";
+import Loadable from "@/components/common/Loadable.vue";
+import ListPosts from "@/components/post/ListPosts.vue";
+import ButtonFollow from "@/components/user/ButtonFollow.vue";
 import ListUsers from "@/components/user/ListUsers.vue";
 import ProfileTab from "@/components/user/ProfileTab.vue";
-import ButtonFollow from "@/components/user/ButtonFollow.vue";
-import ListPosts from "@/components/post/ListPosts.vue";
-
-import { useActorProfile } from "@/lib/query";
 import { useObjectInspector } from "@/lib/composable";
-
-import defaultHero from "@/assets/default-hero.jpg?url";
+import { useActorProfile } from "@/lib/query";
 
 const props = defineProps({
   actor: {

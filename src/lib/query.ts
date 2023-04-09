@@ -1,30 +1,30 @@
 import {
   QueryClient,
+  QueryKey,
+  useIsFetching,
   useMutation,
   useQuery,
   useQueryClient,
-  QueryKey,
   UseQueryReturnType,
-  useIsFetching,
 } from "@tanstack/vue-query";
+import { computed, onActivated, Ref } from "vue";
 
 import {
-  unfollow,
+  deletePost,
   getAuthorFeed,
   getFollowers,
   getFollows,
-  getThread,
+  getNotifications,
+  getPost,
   getProfile,
   getTimeline,
-  deletePost,
-  postText,
-  repost,
   like,
-  getNotifications,
+  postText,
   ProfileViewDetailed,
-  getPost,
+  repost,
+  unfollow,
 } from "@/lib/bsky";
-import { computed, onActivated, Ref } from "vue";
+
 import { Overwrite } from "./well-typed";
 
 const defaultQueryOptions = {

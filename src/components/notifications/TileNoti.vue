@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { PropType } from "vue";
-import { Notification } from "@/lib/bsky";
+
 import Avatar from "@/components/common/Avatar.vue";
 import Username from "@/components/common/Username.vue";
+import { Notification } from "@/lib/bsky";
 
 import TileNotiLike from "./TileNoti/TileNotiLike.vue";
 import TileNotiRepost from "./TileNoti/TileNotiRepost.vue";

@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { reactive } from "vue";
-import { searchActors, ProfileView } from "@/lib/bsky";
+
 import TileUser from "@/components/user/TileUser.vue";
+import { ProfileView,searchActors } from "@/lib/bsky";
 
 const state = reactive({
   query: "",
@@ -22,7 +23,7 @@ const submit = async () => {
 </script>
 
 <template>
-  <form @submit.prevent="submit" class="input-group my-2">
+  <form class="input-group my-2" @submit.prevent="submit">
     <input
       v-model="state.query"
       type="text"
@@ -47,9 +48,9 @@ const submit = async () => {
   <template v-if="state.users.length > 0">
     <TileUser
       v-for="user in state.users"
+      :key="user.handle"
       class="py-2 my-2"
       :user="user"
-      :key="user.handle"
     />
   </template>
 </template>

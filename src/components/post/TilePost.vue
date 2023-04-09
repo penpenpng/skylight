@@ -1,19 +1,18 @@
 <script setup lang="ts">
-import { PropType, computed } from "vue";
-import { useRoute, useRouter } from "vue-router";
+import { computed, PropType } from "vue";
+import { useRoute } from "vue-router";
 
 import Avatar from "@/components/common/Avatar.vue";
 import Dropdown from "@/components/common/Dropdown.vue";
-import RepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
-import Header from "@/components/post/TilePost/TilePostHeader.vue";
-import Content from "@/components/post/TilePost/TilePostContent.vue";
 import Actions from "@/components/post/TilePost/TilePostActions.vue";
-import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
+import Content from "@/components/post/TilePost/TilePostContent.vue";
 import EmbedExternal from "@/components/post/TilePost/TilePostEmbedExternal.vue";
+import EmbedImage from "@/components/post/TilePost/TilePostEmbedImage.vue";
 import EmbedRecord from "@/components/post/TilePost/TilePostEmbedRecord.vue";
 import TilePostEmbedRecordNotFound from "@/components/post/TilePost/TilePostEmbedRecordNotFound.vue";
-
-import { FeedViewPost, isMe, Embed, Reason } from "@/lib/bsky";
+import Header from "@/components/post/TilePost/TilePostHeader.vue";
+import RepostChip from "@/components/post/TilePost/TilePostRepostChip.vue";
+import { Embed, FeedViewPost, isMe, Reason } from "@/lib/bsky";
 import { useObjectInspector } from "@/lib/composable";
 import { useDeletePostMutation } from "@/lib/query";
 
@@ -26,7 +25,6 @@ const { mutate: deletePost } = useDeletePostMutation();
 
 const post = computed(() => props.feed.post);
 const route = useRoute();
-const router = useRouter();
 
 const menu = computed(() => {
   const keys: string[] = [];

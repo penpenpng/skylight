@@ -1,5 +1,6 @@
 import { ElementType } from "./well-typed";
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const smartMerge = <T extends ArrayLike<any>>(
   before: Readonly<T>,
   after: Readonly<T>,
@@ -39,6 +40,7 @@ export const smartMerge = <T extends ArrayLike<any>>(
   return result;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const solveShortestEditScriptProblem = <T extends ArrayLike<any>>(
   before: Readonly<T>,
   after: Readonly<T>,
@@ -81,7 +83,7 @@ const initializeDpTable = (height: number, width: number): DpTable => {
 type DpTable = number[][];
 
 export const debounce = (callback: () => unknown, interval: number) => {
-  let timer: number = -1;
+  let timer = -1;
   return () => {
     clearTimeout(timer);
     timer = setTimeout(callback, interval);

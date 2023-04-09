@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, PropType, computed } from "vue";
+import { computed,PropType, ref } from "vue";
+
 import InputPost from "@/components/post/InputPost.vue";
 import TilePostActionButton from "@/components/post/TilePost/TilePostActionButton.vue";
-
-import { useRepostMutation, useLikeMutation } from "@/lib/query";
 import { FeedViewPost } from "@/lib/bsky";
+import { useLikeMutation,useRepostMutation } from "@/lib/query";
 
 const props = defineProps({
   feed: { type: Object as PropType<FeedViewPost>, required: true },
